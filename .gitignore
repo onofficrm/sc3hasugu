@@ -1,0 +1,45 @@
+# macOS
+.DS_Store
+._*
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+
+# Editor / IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Gnuboard runtime / secrets
+data/dbconfig.php
+data/dbconfig.local.php
+data/cache/
+data/session/
+data/log/
+data/tmp/
+data/file/
+data/member/
+data/editor/
+data/latest/
+data/icrm.config.php
+data/onoff-builder.config.php
+**/Thumbs.db
+
+# Local env
+.env
+.env.*
+*.pem
+*.key
+
+# FTP deploy state (server-side tracking leftovers)
+*-deploy-v1
+pinkribbon-deploy-v1
+
+# Builder source tooling (dist is deployed via onoff-builder-bridge/imports)
+build/**/node_modules/
+build/**/dist/
+**/node_modules/
+build/*.zip
