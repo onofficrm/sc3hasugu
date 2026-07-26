@@ -1,6 +1,6 @@
 <?php
 /**
- * 강동구 동별 하수구 랜딩 — 빌더 홈 렌더 + 동 이름 주입
+ * 구리시 동별 하수구청소 랜딩 — 빌더 홈 렌더 + 동별 고유 콘텐츠 주입
  *
  * 호출 전 설정:
  *   $local_dong_slug  (예: cheonho)
@@ -24,6 +24,7 @@ if (is_file(G5_PATH . '/_site.config.php')) {
 
 $local_dong_slug = preg_replace('/[^a-z0-9-]/', '', strtolower((string) $local_dong_slug));
 $local_dong_name = isset($local_dong_name) ? trim(strip_tags((string) $local_dong_name)) : '';
+$local_area_profile = array();
 
 if (function_exists('g5site_public_profile')) {
     $public_profile = g5site_public_profile();
@@ -34,6 +35,7 @@ if (function_exists('g5site_public_profile')) {
         if (isset($profile_area['slug'], $profile_area['name'])
             && (string) $profile_area['slug'] === $local_dong_slug) {
             $local_dong_name = trim(strip_tags((string) $profile_area['name']));
+            $local_area_profile = $profile_area;
             break;
         }
     }
@@ -88,9 +90,13 @@ if (function_exists('onoff_builder_rewrite_asset_paths')) {
     $html = onoff_builder_rewrite_asset_paths($html, $project_id, $entry);
 }
 
-$site_name = function_exists('g5site_cfg') ? g5site_cfg('site_name', '하수구 해결센터') : '하수구 해결센터';
-$page_title = $local_dong_name . ' 하수구막힘 긴급출동 | ' . $site_name;
-$page_desc = $local_dong_name . ' 싱크대·변기·배수구·하수구 역류 긴급 상담. 사진 1장으로 빠른 안내.';
+$site_name = function_exists('g5site_cfg') ? g5site_cfg('site_name', '원진하수구') : '원진하수구';
+$page_title = !empty($local_area_profile['meta_title'])
+    ? (string) $local_area_profile['meta_title'] . ' | ' . $site_name
+    : $local_dong_name . ' 하수구청소 | ' . $site_name;
+$page_desc = !empty($local_area_profile['meta_description'])
+    ? (string) $local_area_profile['meta_description']
+    : $local_dong_name . ' 하수구청소와 싱크대·변기·배수구 막힘 전화상담.';
 $canonical_path = isset($local_page_url) && $local_page_url !== ''
     ? (string) $local_page_url
     : '/page/local-' . $local_dong_slug . '.php';
@@ -99,10 +105,12 @@ $canonical = (defined('G5_URL') ? G5_URL : '') . $canonical_path;
 if (function_exists('onoff_builder_inject_site_profile')) {
     $html = onoff_builder_inject_site_profile($html, $project_id, array(
         'activeArea' => $local_dong_name,
+        'activeAreaDetails' => $local_area_profile,
         'seoTitle' => $page_title,
         'seoDescription' => $page_desc,
-        'mainKeyword' => $local_dong_name . ' 하수구막힘',
+        'mainKeyword' => $local_dong_name . ' 하수구청소',
         'secondaryKeywords' => array(
+            $local_dong_name . ' 하수구막힘',
             $local_dong_name . ' 싱크대 막힘',
             $local_dong_name . ' 변기 막힘',
             $local_dong_name . ' 배수구 막힘',

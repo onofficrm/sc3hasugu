@@ -9,7 +9,8 @@ if (!function_exists('g5site_cfg')) {
     }
 }
 
-$cmp_consult_label = g5site_cfg('consultation_text', '상담문의');
+$cmp_phone = g5site_cfg('phone', '010-0000-0000');
+$cmp_tel_link = g5site_tel_link($cmp_phone);
 $cmp_site_name = g5site_cfg('site_name', '샘플 사이트');
 ?>
 
@@ -19,11 +20,11 @@ $cmp_site_name = g5site_cfg('site_name', '샘플 사이트');
         <button type="button" class="cmp-popup__close" aria-label="팝업 닫기">
             <i class="fa fa-times" aria-hidden="true"></i>
         </button>
-        <p class="cmp-popup__badge">이벤트</p>
-        <h2 id="cmpPopupTitle" class="cmp-popup__title"><?php echo htmlspecialchars($cmp_site_name, ENT_QUOTES, 'UTF-8'); ?> 오픈 안내</h2>
-        <p class="cmp-popup__desc">샘플 팝업입니다. 이벤트·공지·<?php echo htmlspecialchars($cmp_consult_label, ENT_QUOTES, 'UTF-8'); ?> 유도 문구를 넣어 사용하세요.</p>
+        <p class="cmp-popup__badge">안내</p>
+        <h2 id="cmpPopupTitle" class="cmp-popup__title"><?php echo htmlspecialchars($cmp_site_name, ENT_QUOTES, 'UTF-8'); ?></h2>
+        <p class="cmp-popup__desc">하수구·싱크대·변기 막힘은 전화상담으로 바로 안내드립니다.</p>
         <div class="cmp-popup__actions">
-            <button type="button" class="btn btn-primary consult-modal-open cmp-popup__cta" data-target="#cmpConsultModal"><?php echo htmlspecialchars($cmp_consult_label, ENT_QUOTES, 'UTF-8'); ?></button>
+            <a href="<?php echo htmlspecialchars($cmp_tel_link, ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-primary cmp-popup__cta">전화상담</a>
             <button type="button" class="btn btn-outline cmp-popup__close-btn">닫기</button>
         </div>
         <label class="cmp-popup__today">

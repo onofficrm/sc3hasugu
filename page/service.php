@@ -2,6 +2,7 @@
 include_once(dirname(__FILE__).'/_init.php');
 include_once(G5_PATH.'/section/_helpers.php');
 
+$page_robots = 'noindex,nofollow';
 $g5_page_services = array(
     array('img' => 'service-01.jpg', 'title' => '홈페이지 제작', 'desc' => '기업·브랜드 맞춤 반응형 사이트를 기획부터 오픈까지 진행합니다.'),
     array('img' => 'service-02.jpg', 'title' => '쇼핑몰 구축', 'desc' => '영카트 연동, 상품·주문·결제 흐름을 설계합니다.'),

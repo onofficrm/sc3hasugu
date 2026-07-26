@@ -804,18 +804,98 @@ if (!function_exists('onoff_builder_inject_site_profile')) {
             $profile_json = '{}';
         }
 
-        $schema = array(
-            '@context' => 'https://schema.org',
+        $business_id = rtrim($site_url, '/') . '/#business';
+        $business = array(
             '@type' => 'LocalBusiness',
+            '@id' => $business_id,
             'name' => isset($profile['companyName']) ? (string) $profile['companyName'] : $title,
-            'url' => $canonical,
-            'telephone' => isset($profile['phone']) ? (string) $profile['phone'] : '',
-            'address' => array(
+            'url' => rtrim($site_url, '/') . '/',
+            'areaServed' => isset($profile['regionName']) ? (string) $profile['regionName'] : '',
+        );
+        if (!empty($profile['phone'])) {
+            $business['telephone'] = (string) $profile['phone'];
+        }
+        if (!empty($profile['address'])) {
+            $business['address'] = array(
                 '@type' => 'PostalAddress',
-                'streetAddress' => isset($profile['address']) ? (string) $profile['address'] : '',
+                'streetAddress' => (string) $profile['address'],
                 'addressRegion' => isset($profile['regionName']) ? (string) $profile['regionName'] : '',
                 'addressCountry' => 'KR',
-            ),
+            );
+        }
+
+        $graph = array($business);
+        $graph[] = array(
+            '@type' => 'Service',
+            '@id' => $canonical . '#service',
+            'name' => $main_keyword !== '' ? $main_keyword : $title,
+            'serviceType' => '하수구청소',
+            'areaServed' => !empty($profile['activeArea'])
+                ? (string) $profile['activeArea']
+                : (isset($profile['regionName']) ? (string) $profile['regionName'] : ''),
+            'provider' => array('@id' => $business_id),
+            'url' => $canonical,
+        );
+        $graph[] = array(
+            '@type' => 'WebPage',
+            '@id' => $canonical . '#webpage',
+            'url' => $canonical,
+            'name' => $title,
+            'description' => $description,
+            'about' => array('@id' => $canonical . '#service'),
+        );
+
+        if (!empty($profile['activeArea'])) {
+            $graph[] = array(
+                '@type' => 'BreadcrumbList',
+                '@id' => $canonical . '#breadcrumb',
+                'itemListElement' => array(
+                    array(
+                        '@type' => 'ListItem',
+                        'position' => 1,
+                        'name' => '홈',
+                        'item' => rtrim($site_url, '/') . '/',
+                    ),
+                    array(
+                        '@type' => 'ListItem',
+                        'position' => 2,
+                        'name' => (string) $profile['activeArea'] . ' 하수구청소',
+                        'item' => $canonical,
+                    ),
+                ),
+            );
+        }
+
+        $area_details = isset($profile['activeAreaDetails']) && is_array($profile['activeAreaDetails'])
+            ? $profile['activeAreaDetails']
+            : array();
+        if (!empty($area_details['faq']) && is_array($area_details['faq'])) {
+            $faq_entities = array();
+            foreach ($area_details['faq'] as $faq) {
+                if (empty($faq['question']) || empty($faq['answer'])) {
+                    continue;
+                }
+                $faq_entities[] = array(
+                    '@type' => 'Question',
+                    'name' => (string) $faq['question'],
+                    'acceptedAnswer' => array(
+                        '@type' => 'Answer',
+                        'text' => (string) $faq['answer'],
+                    ),
+                );
+            }
+            if ($faq_entities) {
+                $graph[] = array(
+                    '@type' => 'FAQPage',
+                    '@id' => $canonical . '#faq',
+                    'mainEntity' => $faq_entities,
+                );
+            }
+        }
+
+        $schema = array(
+            '@context' => 'https://schema.org',
+            '@graph' => $graph,
         );
         $schema_json = json_encode($schema, $json_options);
         if ($schema_json === false) {

@@ -2,6 +2,7 @@
 include_once(dirname(__FILE__).'/_init.php');
 include_once(G5_PATH.'/section/_helpers.php');
 
+$page_robots = 'noindex,nofollow';
 g5_page_start('회사소개');
 ?>
 <div class="page-template page-about">

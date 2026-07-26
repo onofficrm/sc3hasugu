@@ -30,9 +30,9 @@ if (is_array($clone_sub_keywords)) {
 }
 
 $site_config = array(
-    'site_name'           => $clone_value('site_name', '지역 하수구막힘 긴급출동'),
-    'site_desc'           => $clone_value('site_desc', '하수구, 싱크대, 변기 막힘 긴급 상담'),
-    'company_name'        => $clone_value('company_name', '하수구 해결센터'),
+    'site_name'           => $clone_value('site_name', '원진하수구'),
+    'site_desc'           => $clone_value('site_desc', '구리시 하수구청소 전화상담'),
+    'company_name'        => $clone_value('company_name', '원진하수구'),
     'ceo_name'            => $clone_value('ceo_name', ''),
     'business_no'         => $clone_value('business_no', ''),
     'phone'               => $clone_value('phone', ''),
@@ -44,16 +44,16 @@ $site_config = array(
     'logo_path'           => '/img/logo/logo.svg',
     'og_image'            => '/img/common/og-image.jpg',
     /* SEO (components/seo-meta.php) */
-    'seo_title'           => $clone_value('seo_title', '지역 하수구막힘 긴급출동'),
-    'seo_description'     => $clone_value('seo_description', '하수구, 싱크대, 변기 막힘 긴급출동 서비스'),
-    'main_keyword'        => $clone_value('main_keyword', '하수구막힘'),
+    'seo_title'           => $clone_value('seo_title', '구리하수구청소 | 원진하수구'),
+    'seo_description'     => $clone_value('seo_description', '구리시 하수구청소와 싱크대·변기·배수구 막힘 전화상담'),
+    'main_keyword'        => $clone_value('main_keyword', '구리하수구청소'),
     'sub_keywords'        => $clone_sub_keywords,
     'robots'              => 'index,follow',
-    'consultation_text'   => '긴급출동 상담',
-    'footer_desc'         => $clone_value('footer_desc', '하수구·싱크대·변기 막힘 긴급출동'),
-    /* 문의 폼 → inquiry 게시판 (proc/inquiry-submit.php) */
+    'consultation_text'   => '전화상담',
+    'footer_desc'         => $clone_value('footer_desc', '하수구·싱크대·변기 막힘 전화상담'),
+    /* 문의 폼 → inquiry 게시판 (proc/inquiry-submit.php) — 전화상담 전용 사이트에서는 미사용 */
     'inquiry_bo_table'        => 'inquiry',
-    'inquiry_notify_enabled'  => true,
+    'inquiry_notify_enabled'  => false,
     'inquiry_notify_email'    => 'admin@example.com',  /* 운영 시 실제 수신 주소로 변경 */
     'inquiry_notify_name'     => '관리자',
     /* 텔레그램 알림 — 운영 시 토큰·채팅 ID 입력 후 enabled true */
@@ -76,12 +76,12 @@ $site_config = array(
     'sales_no'            => '',
     'privacy_manager'     => '',
     'kakao_map_key'       => '',
-    'kakao_map_lat'       => '37.5665',
-    'kakao_map_lng'       => '126.9780',
+    'kakao_map_lat'       => '37.5943',
+    'kakao_map_lng'       => '127.1296',
     /* Google Maps — 내 주변 찾기 (components/maps, page/map-locator.php) */
     'google_maps_api_key'       => '',
-    'map_default_lat'           => '10.3157',
-    'map_default_lng'           => '123.8854',
+    'map_default_lat'           => '37.5943',
+    'map_default_lng'           => '127.1296',
     'map_default_zoom'          => 13,
     'map_use_current_location'  => true,
     'map_default_radius_km'     => 5,
@@ -99,7 +99,7 @@ $site_config = array(
     /* RSS · sitemap · robots (lib/seo-feed.lib.php, rss.php, sitemap.php) */
     'seo_feed_enabled'          => true,
     'sitemap_static_pages'      => '',  /* 비우면 /page/*.php 자동 (제외 목록 제외) */
-    'sitemap_exclude_pages'     => '/page/local.php',  /* 쿼리형 공용 지역 페이지는 sitemap 자동 수집 제외 */
+    'sitemap_exclude_pages'     => '/page/local.php,/page/about.php,/page/service.php,/page/portfolio.php,/page/map-locator.php,/page/privacy.php',  /* 복제 템플릿·샘플·noindex 페이지 제외 */
     'sitemap_exclude_boards'    => 'inquiry',  /* 문의 게시판 등 sitemap/RSS 제외 */
     'sitemap_max_posts_per_board' => '500',
     'sitemap_rss_item_limit'    => '50',

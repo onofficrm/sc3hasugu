@@ -2,6 +2,7 @@
 include_once(dirname(__FILE__).'/_init.php');
 
 $page_description = 'Google Maps 기반 지역 장소 찾기 샘플 페이지입니다. API 키 설정 후 내 주변 장소를 확인할 수 있습니다.';
+$page_robots = 'noindex,nofollow';
 
 if (is_file(G5_PATH.'/components/maps/map-config.php')) {
     include_once(G5_PATH.'/components/maps/map-config.php');

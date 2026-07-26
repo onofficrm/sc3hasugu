@@ -2,6 +2,7 @@
 include_once(dirname(__FILE__).'/_init.php');
 include_once(G5_PATH.'/section/_helpers.php');
 
+$page_robots = 'noindex,nofollow';
 $g5_page_works = array(
     array('img' => 'portfolio-01.jpg', 'title' => '기업 홈페이지', 'tag' => 'Corporate'),
     array('img' => 'portfolio-02.jpg', 'title' => '쇼핑몰', 'tag' => 'Shop'),

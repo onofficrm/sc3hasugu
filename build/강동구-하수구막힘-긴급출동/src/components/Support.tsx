@@ -1,45 +1,50 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronDown, ShieldAlert, PhoneCall } from 'lucide-react';
-import { contactInfo } from '../data';
+import { activeLocalArea, assetUrl, contactInfo, getDongFromUrl, keywords, phoneCtaLabel, phoneCtaSubLabel, regionName, telHref } from '../data';
 
 export const Notices = () => {
+  const promises = [
+    { num: '01', title: '증상 확인', desc: '막힌 위치와 물 내려가는 상태 확인' },
+    { num: '02', title: '배관 점검', desc: '현장 구조에 맞춰 원인과 범위 확인' },
+    { num: '03', title: '배수 확인', desc: '작업 후 물 흐름과 관리 방법 안내' },
+  ];
+
   return (
-    <section id="notices" className="py-24 bg-white scroll-mt-20">
-      <div className="max-w-4xl mx-auto px-4">
-        <div className="bg-slate-50 border border-slate-200 rounded-[2rem] p-8 md:p-14">
-          <div className="flex items-center gap-4 mb-10">
-            <div className="p-3 bg-orange-100 rounded-2xl">
-              <ShieldAlert className="w-8 h-8 text-orange-500" />
+    <section id="notices" className="py-20 md:py-28 bg-white scroll-mt-20">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="grid lg:grid-cols-2 rounded-[2rem] md:rounded-[2.5rem] overflow-hidden bg-slate-950 shadow-2xl">
+          <div className="relative min-h-[380px] lg:min-h-[600px]">
+            <img
+              src={assetUrl('commercial-drain.webp')}
+              alt="상가 하수구 현장 점검"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent" />
+            <div className="absolute left-6 right-6 bottom-6 md:left-8 md:bottom-8">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500 text-white font-extrabold text-sm">
+                <ShieldAlert className="w-4 h-4" /> 현장 원칙
+              </span>
             </div>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
-              작업 전 반드시 확인하세요
-            </h2>
           </div>
-          
-          <ul className="space-y-8">
-            <li className="flex gap-5">
-              <div className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shrink-0 mt-1 shadow-md">1</div>
-              <div>
-                <h4 className="font-bold text-slate-900 text-lg mb-2">투명한 사전 견적</h4>
-                <p className="text-slate-600 font-medium leading-relaxed">현장 상황(배관 길이, 막힘 정도)에 따라 작업 방식이 달라지므로, 현장 점검 후 정확한 견적을 안내해 드립니다.</p>
-              </div>
-            </li>
-            <li className="flex gap-5">
-              <div className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shrink-0 mt-1 shadow-md">2</div>
-              <div>
-                <h4 className="font-bold text-slate-900 text-lg mb-2">과잉 진단 금지</h4>
-                <p className="text-slate-600 font-medium leading-relaxed">불필요한 공사나 부속 교체를 강요하지 않으며, 꼭 필요한 작업만 정직하게 진행합니다.</p>
-              </div>
-            </li>
-            <li className="flex gap-5">
-              <div className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shrink-0 mt-1 shadow-md">3</div>
-              <div>
-                <h4 className="font-bold text-slate-900 text-lg mb-2">미해결 시 작업비 청구 안함</h4>
-                <p className="text-slate-600 font-medium leading-relaxed">문제를 해결하지 못했을 경우 작업비를 받지 않습니다. (단, 기본 출장 점검비는 발생할 수 있습니다.)</p>
-              </div>
-            </li>
-          </ul>
+
+          <div className="p-7 md:p-12 lg:p-14 flex flex-col justify-center">
+            <p className="text-orange-400 font-extrabold tracking-widest text-sm mb-3">OUR PROMISE</p>
+            <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight mb-10 break-keep">
+              증상부터 배관까지<br />순서대로 확인
+            </h2>
+            <div className="space-y-3">
+              {promises.map((item) => (
+                <div key={item.num} className="flex items-center gap-4 p-4 md:p-5 rounded-2xl bg-white/5 border border-white/10">
+                  <strong className="text-orange-400 font-black text-xl">{item.num}</strong>
+                  <div>
+                    <h3 className="text-white font-extrabold text-lg">{item.title}</h3>
+                    <p className="text-slate-400 text-sm font-medium break-keep">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -47,38 +52,44 @@ export const Notices = () => {
 };
 
 export const FAQ = () => {
+  const brand = contactInfo.companyName;
+  const localFaqs = (activeLocalArea?.faq || []).map((item) => ({
+    q: item.question,
+    a: item.answer,
+  }));
   const faqs = [
+    ...localFaqs,
     {
-      q: "강동구 전지역 상담 가능한가요?",
-      a: "강동구 주요 지역의 하수구 막힘, 싱크대 막힘, 변기 막힘, 배수구 막힘 증상 상담이 가능합니다. 정확한 가능 여부는 위치와 시간에 따라 안내드립니다."
+      q: `${regionName} 전 지역 하수구청소가 가능한가요?`,
+      a: `네. ${brand}는 ${regionName} 주요 동 하수구청소·막힘 전화상담이 가능합니다. 아파트·상가 위치에 따라 출동 가능 여부를 안내드립니다.`
     },
     {
-      q: "하수구 막힘 비용은 얼마인가요?",
-      a: "비용은 막힘 정도, 배관 구조, 필요한 장비, 작업 범위에 따라 달라질 수 있습니다. 상담 시 증상을 알려주시면 가능한 범위에서 안내드립니다."
+      q: `${regionName} 하수구청소 비용은 어떻게 되나요?`,
+      a: "배관 길이, 막힘 정도, 장비 사용 범위에 따라 달라집니다. 전화로 증상과 주소를 알려주시면 가능한 범위에서 안내드립니다. 현장 확인 후 정확한 견적을 말씀드립니다."
     },
     {
-      q: "싱크대 막힘도 가능한가요?",
-      a: "네. 싱크대 물 빠짐 불량, 악취, 반복 막힘 등 다양한 증상 상담이 가능합니다."
+      q: "아파트 싱크대·배수구 청소도 되나요?",
+      a: `가능합니다. ${regionName} 아파트 단지 주방 싱크대, 욕실 배수구, 베란다 배수 막힘도 전화상담 후 일정에 맞춰 안내합니다.`
     },
     {
-      q: "변기 막힘도 상담 가능한가요?",
-      a: "네. 변기 물이 잘 내려가지 않거나 물이 차오르는 증상도 상담 가능합니다."
+      q: "상가·음식점 주방 하수구도 가능한가요?",
+      a: "상가·음식점 주방 배수 막힘도 대응합니다. 영업 시간에 맞춰 전화로 먼저 상황을 확인해 주세요."
     },
     {
-      q: "하수구 냄새가 심한데 막힘 문제인가요?",
-      a: "냄새의 원인은 배관 내부 오염, 트랩 문제, 역류, 배수 불량 등 다양할 수 있습니다. 증상 확인 후 안내가 필요합니다."
+      q: "변기 막힘도 전화상담만으로 안내받을 수 있나요?",
+      a: "네. 변기 물이 안 내려가거나 차오르는 증상도 전화로 먼저 확인합니다. 상담·일정 안내는 전화로만 진행합니다."
     },
     {
-      q: "밤이나 주말에도 상담 가능한가요?",
-      a: "긴급 상황은 상담 후 가능한 일정과 대응 여부를 안내드립니다."
+      q: `밤·주말에도 ${regionName} 출동이 되나요?`,
+      a: "출동 가능 시간은 현장 위치와 현재 일정에 따라 달라집니다. 전화상담 시 가능한 시간과 대응 여부를 확인해 주세요."
     },
     {
-      q: "뚫어뻥으로 해결되지 않으면 어떻게 해야 하나요?",
-      a: "입구 쪽 문제가 아니라 배관 안쪽 막힘일 수 있습니다. 반복되거나 해결되지 않는 경우 전문 장비 점검이 필요할 수 있습니다."
+      q: "뚫어뻥으로 안 되면 어떻게 하나요?",
+      a: "입구가 아니라 배관 안쪽 이물질·스케일인 경우가 많습니다. 반복 막힘이라면 전문 장비 점검이 필요할 수 있어 전화로 증상을 자세히 알려 주세요."
     },
     {
-      q: "작업 후 다시 막힐 수도 있나요?",
-      a: "배관 상태와 사용 환경에 따라 재발 가능성이 있을 수 있습니다. 반복 막힘이 있다면 원인 확인이 중요합니다."
+      q: `${brand}와 다른 업체 차이는 뭔가요?`,
+      a: `${brand}는 ${regionName} 동별 배관 환경과 증상을 먼저 확인합니다. 온라인 신청 없이 전화로 위치와 증상을 듣고 필요한 확인 항목을 안내합니다.`
     }
   ];
 
@@ -89,7 +100,7 @@ export const FAQ = () => {
       <div className="max-w-3xl mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-5">
-            강동구하수구막힘 자주 묻는 질문
+            {keywords.main} 자주 묻는 질문
           </h2>
         </div>
 
@@ -112,7 +123,19 @@ export const FAQ = () => {
                     className="overflow-hidden"
                   >
                     <div className="px-6 md:px-8 pb-8 text-slate-600 bg-slate-50/50 border-t border-slate-100">
-                      <div className="pt-6 font-medium leading-relaxed break-keep">A. {faq.a}</div>
+                      <div className="pt-6 font-medium leading-relaxed break-keep mb-5">A. {faq.a}</div>
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <a
+                          href={telHref()}
+                          className="inline-flex flex-col items-center justify-center gap-0.5 bg-orange-500 hover:bg-orange-600 text-white px-4 py-3 rounded-xl text-sm font-extrabold leading-none"
+                        >
+                          <span className="inline-flex items-center gap-1.5 text-xs opacity-95">
+                            <PhoneCall className="w-3.5 h-3.5" />
+                            {phoneCtaSubLabel(regionName)}
+                          </span>
+                          <span className="text-lg tracking-tight">{phoneCtaLabel(regionName)}</span>
+                        </a>
+                      </div>
                     </div>
                   </motion.div>
                 )}
@@ -126,41 +149,29 @@ export const FAQ = () => {
 };
 
 export const FinalCTA = () => {
+  const area = getDongFromUrl() || regionName;
   return (
-    <section id="contact" className="py-24 bg-slate-900 relative overflow-hidden scroll-mt-20">
-      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
+    <section id="contact" className="py-24 md:py-32 bg-slate-900 relative overflow-hidden scroll-mt-20">
+      <img src={assetUrl('drain-hero.webp')} alt="" className="absolute inset-0 w-full h-full object-cover object-[70%_center]" />
+      <div className="absolute inset-0 bg-slate-950/80"></div>
       <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
         <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight tracking-tight break-keep">
-          강동구하수구막힘,<br className="hidden md:block" /> 지금 증상만 알려주세요
+          {area} 하수구청소,<br className="hidden md:block" /> 지금 바로 전화하세요
         </h2>
-        <p className="text-slate-300 text-lg mb-12 font-medium break-keep leading-relaxed max-w-2xl mx-auto">
-          물이 내려가지 않거나 냄새, 역류, 반복 막힘이 있다면 더 늦기 전에 상담해보세요.<br className="hidden md:block" />
-          현재 증상과 위치를 알려주시면 상황에 맞게 안내드립니다.
+        <p className="text-slate-300 text-lg mb-10 font-medium break-keep leading-relaxed max-w-2xl mx-auto">
+          {contactInfo.companyName} · {regionName} 하수구청소. 증상과 위치를 전화로 알려주시면 필요한 청소·작업 방향을 안내합니다.
         </p>
-        
+
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <a
-            href={`tel:${contactInfo.phone}`}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-8 py-5 rounded-2xl font-bold text-lg transition-all hover:-translate-y-1 shadow-lg shadow-orange-500/30 border border-orange-500"
+            href={telHref()}
+            className="w-full sm:w-auto flex flex-col items-center justify-center gap-1 bg-orange-500 hover:bg-orange-600 text-white px-8 py-5 rounded-2xl font-extrabold transition-all hover:-translate-y-1 shadow-lg shadow-orange-500/30 border border-orange-500 leading-none"
           >
-            <PhoneCall className="w-5 h-5" />
-            전화상담 바로가기
-          </a>
-          
-          <a
-            href="#"
-            onClick={(e) => { e.preventDefault(); alert('카카오톡 상담 채널로 연결됩니다.'); }}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-transparent hover:bg-white/5 text-white px-8 py-5 rounded-2xl font-bold text-lg transition-all border border-white/30"
-          >
-            카카오톡 상담하기
-          </a>
-          
-          <a
-            href="#contact-form"
-            onClick={(e) => { e.preventDefault(); alert('문의폼 작성 모달이 열립니다.'); }}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-transparent hover:bg-white/5 text-white px-8 py-5 rounded-2xl font-bold text-lg transition-all border border-white/30"
-          >
-            문의폼 작성하기
+            <span className="inline-flex items-center gap-2 text-sm opacity-95">
+              <PhoneCall className="w-5 h-5" />
+              {phoneCtaSubLabel(area)}
+            </span>
+            <span className="text-3xl md:text-4xl tracking-tight">{phoneCtaLabel(area)}</span>
           </a>
         </div>
       </div>
@@ -175,9 +186,20 @@ export const Footer = () => {
         <div>
           <h3 className="text-slate-300 font-extrabold text-xl mb-5">{contactInfo.companyName}</h3>
           <div className="space-y-2 font-medium">
-            <p>대표: {contactInfo.ceo} | 사업자등록번호: {contactInfo.businessNumber}</p>
-            <p>주소: {contactInfo.address}</p>
-            <p className="text-slate-400">고객센터: {contactInfo.phoneFormatted}</p>
+            {(contactInfo.ceo || contactInfo.businessNumber) && (
+              <p>
+                {contactInfo.ceo ? `대표: ${contactInfo.ceo}` : ''}
+                {contactInfo.ceo && contactInfo.businessNumber ? ' | ' : ''}
+                {contactInfo.businessNumber ? `사업자등록번호: ${contactInfo.businessNumber}` : ''}
+              </p>
+            )}
+            {contactInfo.address && <p>주소: {contactInfo.address}</p>}
+            <p className="text-slate-300">
+              고객센터:{' '}
+              <a href={telHref()} className="text-orange-400 font-extrabold text-lg hover:text-orange-300">
+                {contactInfo.phoneFormatted}
+              </a>
+            </p>
           </div>
         </div>
         <div className="md:text-right font-medium flex flex-col justify-between">

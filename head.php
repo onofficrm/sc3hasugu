@@ -90,9 +90,10 @@ if ($g5_site_title === '') {
     $g5_site_title = get_text($config['cf_title']);
 }
 
-// 상담문의 URL (메인: contact 섹션 / 그 외: Q&A)
-$g5_inquiry_url = defined('_INDEX_') ? G5_URL.'/#section-contact' : G5_BBS_URL.'/qalist.php';
-$g5_consult_label = function_exists('g5site_cfg') ? g5site_cfg('consultation_text', '상담문의') : '상담문의';
+// 전화상담만 사용
+$g5_consult_label = function_exists('g5site_cfg') ? g5site_cfg('consultation_text', '전화상담') : '전화상담';
+$g5_phone = function_exists('g5site_cfg') ? g5site_cfg('phone', '') : '';
+$g5_inquiry_url = function_exists('g5site_tel_link') ? g5site_tel_link($g5_phone) : ('tel:' . preg_replace('/[^0-9+]/', '', $g5_phone));
 
 // site_config 브랜드 색 → :root (hex만 허용)
 $g5_css_brand = '';

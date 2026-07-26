@@ -1,15 +1,18 @@
 <?php
 if (!defined('_GNUBOARD_')) exit;
 include_once(G5_PATH.'/section/_helpers.php');
+
+$phone = function_exists('g5site_cfg') ? g5site_cfg('phone', '') : '';
+$tel = function_exists('g5site_tel_link') ? g5site_tel_link($phone) : ('tel:' . preg_replace('/[^0-9+]/', '', $phone));
 ?>
 <section class="section section-hero" id="section-hero">
   <div class="section-inner section-hero__inner">
     <div class="section-hero__content reveal">
       <p class="section-eyebrow">Welcome</p>
-      <h2 class="section-title">고객의 성장을 함께하는<br>디지털 파트너</h2>
-      <p class="section-desc">기획부터 제작·운영까지 한 번에. 샘플 그누보드 베이스 템플릿으로 빠르게 홈페이지를 구축하고 빌더 디자인을 적용해 보세요.</p>
+      <h2 class="section-title">하수구·싱크대·변기 막힘<br>지금 바로 전화상담</h2>
+      <p class="section-desc">별도 온라인 접수 없이 전화로만 안내드립니다. 증상과 위치를 말씀해 주세요.</p>
       <div class="section-actions">
-        <a href="#section-contact" class="btn btn-primary">무료 상담 신청</a>
+        <a href="<?php echo htmlspecialchars($tel, ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-primary">전화상담</a>
         <a href="#section-service" class="btn btn-outline">서비스 보기</a>
       </div>
     </div>

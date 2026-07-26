@@ -14,10 +14,10 @@ if (!function_exists('g5site_cfg')) {
 
 $privacy_site_name   = function_exists('g5site_cfg') ? g5site_cfg('site_name', '본 사이트') : '본 사이트';
 $privacy_company     = function_exists('g5site_cfg') ? g5site_cfg('company_name', $privacy_site_name) : $privacy_site_name;
-$privacy_ceo         = function_exists('g5site_cfg') ? g5site_cfg('ceo_name', '대표자명') : '대표자명';
-$privacy_email       = function_exists('g5site_cfg') ? g5site_cfg('email', 'help@example.com') : 'help@example.com';
-$privacy_phone       = function_exists('g5site_cfg') ? g5site_cfg('phone', '010-0000-0000') : '010-0000-0000';
-$privacy_address     = function_exists('g5site_cfg') ? g5site_cfg('address', '주소를 입력하세요') : '주소를 입력하세요';
+$privacy_ceo         = function_exists('g5site_cfg') ? g5site_cfg('ceo_name', '') : '';
+$privacy_email       = function_exists('g5site_cfg') ? g5site_cfg('email', '') : '';
+$privacy_phone       = function_exists('g5site_cfg') ? g5site_cfg('phone', '') : '';
+$privacy_address     = function_exists('g5site_cfg') ? g5site_cfg('address', '') : '';
 $privacy_manager     = function_exists('g5site_cfg') ? g5site_cfg('privacy_manager', '') : '';
 if ($privacy_manager === '') {
     $privacy_manager = $privacy_ceo;
@@ -25,7 +25,7 @@ if ($privacy_manager === '') {
 
 $page_title       = '개인정보처리방침';
 $page_description = $privacy_company.'의 개인정보 수집·이용·보관 및 정보주체 권리에 관한 안내입니다.';
-$page_robots      = 'index,follow';
+$page_robots      = 'noindex,follow';
 
 g5_page_start('개인정보처리방침');
 ?>
@@ -100,10 +100,10 @@ g5_page_start('개인정보처리방침');
                 <h2 class="page-section__title">7. 개인정보 보호책임자</h2>
                 <ul class="page-list">
                     <li><strong>회사명:</strong> <?php echo htmlspecialchars($privacy_company, ENT_QUOTES, 'UTF-8'); ?></li>
-                    <li><strong>개인정보 보호책임자:</strong> <?php echo htmlspecialchars($privacy_manager, ENT_QUOTES, 'UTF-8'); ?></li>
+                    <?php if ($privacy_manager !== '') { ?><li><strong>개인정보 보호책임자:</strong> <?php echo htmlspecialchars($privacy_manager, ENT_QUOTES, 'UTF-8'); ?></li><?php } ?>
                     <li><strong>연락처:</strong> <?php echo htmlspecialchars($privacy_phone, ENT_QUOTES, 'UTF-8'); ?></li>
-                    <li><strong>이메일:</strong> <a href="mailto:<?php echo htmlspecialchars($privacy_email, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($privacy_email, ENT_QUOTES, 'UTF-8'); ?></a></li>
-                    <li><strong>주소:</strong> <?php echo htmlspecialchars($privacy_address, ENT_QUOTES, 'UTF-8'); ?></li>
+                    <?php if ($privacy_email !== '') { ?><li><strong>이메일:</strong> <a href="mailto:<?php echo htmlspecialchars($privacy_email, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($privacy_email, ENT_QUOTES, 'UTF-8'); ?></a></li><?php } ?>
+                    <?php if ($privacy_address !== '') { ?><li><strong>주소:</strong> <?php echo htmlspecialchars($privacy_address, ENT_QUOTES, 'UTF-8'); ?></li><?php } ?>
                 </ul>
             </section>
 

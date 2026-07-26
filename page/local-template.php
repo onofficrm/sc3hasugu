@@ -167,8 +167,7 @@ g5_page_start($local_main_keyword !== '' ? $local_main_keyword : '지역 서비�
       <p class="page-desc"><?php echo get_text($local_description); ?></p>
       <p class="page-local__notice">이 페이지는 <strong>템플릿 샘플</strong>입니다. 실제 납품 시 지역·서비스·가격·후기·FAQ를 모두 수정한 뒤 별도 URL로 공개하세요.</p>
       <div class="page-cta__actions page-local__hero-actions">
-        <button type="button" class="btn btn-primary consult-modal-open">상담 문의</button>
-        <a href="<?php echo htmlspecialchars($local_tel_link, ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline">전화 문의</a>
+        <a href="<?php echo htmlspecialchars($local_tel_link, ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-primary">전화상담</a>
       </div>
     </div>
   </header>
@@ -296,14 +295,10 @@ g5_page_start($local_main_keyword !== '' ? $local_main_keyword : '지역 서비�
   <!-- 온라인 상담 CTA -->
   <section class="page-section page-cta page-cta--dark reveal" id="local-contact">
     <div class="page-inner page-cta__inner">
-      <h2 class="page-cta__title"><?php echo get_text($local_area); ?> <?php echo get_text($local_service); ?> 상담</h2>
-      <p class="page-cta__desc">온라인·전화 상담으로 일정과 프로그램을 안내해 드립니다.</p>
+      <h2 class="page-cta__title"><?php echo get_text($local_area); ?> <?php echo get_text($local_service); ?> 전화상담</h2>
+      <p class="page-cta__desc">전화로 증상과 위치를 알려주시면 바로 안내해 드립니다.</p>
       <div class="page-cta__actions">
-        <button type="button" class="btn btn-primary consult-modal-open">상담 문의</button>
-        <a href="<?php echo htmlspecialchars($local_tel_link, ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline">전화 문의</a>
-        <?php if ($local_kakao !== '' && $local_kakao !== '#') { ?>
-        <a href="<?php echo htmlspecialchars($local_kakao, ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline" target="_blank" rel="noopener noreferrer">카카오톡</a>
-        <?php } ?>
+        <a href="<?php echo htmlspecialchars($local_tel_link, ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-primary">전화상담</a>
       </div>
     </div>
   </section>
@@ -330,9 +325,9 @@ g5_page_start($local_main_keyword !== '' ? $local_main_keyword : '지역 서비�
 
   <section class="page-section page-cta reveal">
     <div class="page-inner page-cta__inner">
-      <h2 class="page-cta__title"><?php echo get_text($local_main_keyword); ?> 상담 받기</h2>
-      <p class="page-cta__desc">지역·일정·예산을 알려 주시면 맞춤 안내를 드립니다.</p>
-      <button type="button" class="btn btn-primary consult-modal-open">무료 상담 신청</button>
+      <h2 class="page-cta__title"><?php echo get_text($local_main_keyword); ?> 전화상담</h2>
+      <p class="page-cta__desc">지역·증상을 전화로 알려 주시면 맞춤 안내를 드립니다.</p>
+      <a href="<?php echo htmlspecialchars($local_tel_link, ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-primary">전화상담</a>
     </div>
   </section>
 </div>

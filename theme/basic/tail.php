@@ -10,6 +10,13 @@ if(G5_COMMUNITY_USE === false) {
     include_once(G5_THEME_SHOP_PATH.'/shop.tail.php');
     return;
 }
+
+if (is_file(G5_PATH.'/_site.config.php')) {
+    include_once G5_PATH.'/_site.config.php';
+}
+$theme_company = function_exists('g5site_cfg') ? g5site_cfg('company_name', '원진하수구') : '원진하수구';
+$theme_phone = function_exists('g5site_cfg') ? g5site_cfg('phone', '') : '';
+$theme_tel = function_exists('g5site_tel_link') ? g5site_tel_link($theme_phone) : '#';
 ?>
 
     </div>
@@ -35,14 +42,10 @@ if(G5_COMMUNITY_USE === false) {
             <a href="<?php echo get_device_change_url(); ?>">모바일버전</a>
         </div>
         <div id="ft_company" class="ft_cnt">
-        	<h2>사이트 정보</h2>
+        <h2>사이트 정보</h2>
 	        <p class="ft_info">
-	        	회사명 : 회사명 / 대표 : 대표자명<br>
-				주소  : OO도 OO시 OO구 OO동 123-45<br>
-				사업자 등록번호  : 123-45-67890<br>
-				전화 :  02-123-4567  팩스  : 02-123-4568<br>
-				통신판매업신고번호 :  제 OO구 - 123호<br>
-				개인정보관리책임자 :  정보책임자명<br>
+                회사명 : <?php echo get_text($theme_company); ?><br>
+				전화 : <a href="<?php echo htmlspecialchars($theme_tel, ENT_QUOTES, 'UTF-8'); ?>"><?php echo get_text($theme_phone); ?></a><br>
 			</p>
 	    </div>
         <?php
@@ -52,15 +55,15 @@ if(G5_COMMUNITY_USE === false) {
         // 테마의 스킨을 사용하려면 theme/basic 과 같이 지정
         echo latest('theme/notice', 'notice', 4, 13);
         ?>
-        
+
 		<?php echo visit('theme/basic'); // 접속자집계, 테마의 스킨을 사용하려면 스킨을 theme/basic 과 같이 지정 ?>
-	</div>      
+	</div>
         <!-- <div id="ft_catch"><img src="<?php echo G5_IMG_URL; ?>/ft_logo.png" alt="<?php echo G5_VERSION ?>"></div> -->
-        <div id="ft_copy">Copyright &copy; <b>소유하신 도메인.</b> All rights reserved.</div>
-    
-    
+        <div id="ft_copy">Copyright &copy; <b><?php echo get_text($theme_company); ?></b>. All rights reserved.</div>
+
+
     <button type="button" id="top_btn">
-    	<i class="fa fa-arrow-up" aria-hidden="true"></i><span class="sound_only">상단으로</span>
+        <i class="fa fa-arrow-up" aria-hidden="true"></i><span class="sound_only">상단으로</span>
     </button>
     <script>
     $(function() {

@@ -19,56 +19,43 @@ return array(
      * 홈 히어로·헤더·하단바·CTA에 크게 표시되고 tel: 링크로 연결됩니다.
      * ========================================================= */
     'phone' => '010-4265-2634',
-    'ceo_name' => '김배관',
-    'business_no' => '123-45-67890',
-    'email' => 'help@example.com',
+    'ceo_name' => '',
+    'business_no' => '',
+    'email' => '',
     'builder_project_id' => 'gangdong-drain',
 
     /* =========================================================
      * [사이트마다 변경] — 지역 SEO용
      * ========================================================= */
-    'region_name' => '송파구',
-    'region_short' => '송파',
-    'region_initial' => '송',
-    'company_name' => '송파 하수구 해결센터',
-    'address' => '서울특별시 송파구 00로 00',
+    'region_name' => '구리시',
+    'region_short' => '구리',
+    'region_initial' => '원',
+    'company_name' => '원진하수구',
+    'address' => '',
 
-    'site_name' => '송파구 하수구막힘 긴급출동',
-    'site_desc' => '송파구 전 지역 하수구, 싱크대, 변기 막힘 긴급 상담',
-    'seo_title' => '송파구 하수구막힘 긴급출동',
-    'seo_description' => '송파구 전 지역 하수구, 싱크대, 변기 막힘 긴급출동 서비스',
-    'main_keyword' => '송파구하수구막힘',
+    'site_name' => '원진하수구',
+    'site_desc' => '구리시 하수구청소와 싱크대·변기·배수구 막힘 전화상담',
+    'seo_title' => '구리하수구청소 | 원진하수구',
+    'seo_description' => '구리시 동별 하수구청소와 배관 막힘 전화상담 안내',
+    'main_keyword' => '구리하수구청소',
     'sub_keywords' => array(
-        '송파구 싱크대 막힘',
-        '송파구 변기 막힘',
-        '송파구 배수구 막힘',
-        '송파구 하수구 긴급출동',
+        '구리 하수구막힘',
+        '구리 싱크대막힘',
+        '구리 변기막힘',
+        '구리 배수구청소',
     ),
-    'footer_desc' => '송파구 하수구·싱크대·변기 막힘 긴급출동',
+    'footer_desc' => '원진하수구 — 구리시 하수구청소 전화상담',
 
     /* 지역 선택·동별 랜딩. 고정 URL이 없으면 /page/local.php?area=slug 사용 */
     'local_areas' => array(
-        array('slug' => 'jamsil', 'name' => '잠실동', 'label' => '잠실동 하수구막힘', 'url' => '/page/local.php?area=jamsil'),
-        array('slug' => 'songpa', 'name' => '송파동', 'label' => '송파동 하수구막힘', 'url' => '/page/local.php?area=songpa'),
-        array('slug' => 'garak', 'name' => '가락동', 'label' => '가락동 하수구막힘', 'url' => '/page/local.php?area=garak'),
+        array('slug' => 'galmae', 'name' => '갈매동', 'label' => '갈매동 하수구청소', 'url' => '/page/local-galmae.php'),
+        array('slug' => 'inchang', 'name' => '인창동', 'label' => '인창동 하수구청소', 'url' => '/page/local-inchang.php'),
+        array('slug' => 'sutaek', 'name' => '수택동', 'label' => '수택동 하수구청소', 'url' => '/page/local-sutaek.php'),
     ),
     'area_spots' => array(
-        '잠실역 인근', '송파나루역 인근', '가락시장역 인근',
+        '갈매역 인근', '구리역 인근', '구리전통시장',
     ),
 
-    /* 표시용 후기 — 지역별로 문구를 바꿔 중복 콘텐츠를 줄입니다 */
-    'reviews' => array(
-        array(
-            'area' => '잠실동',
-            'title' => '싱크대 막힘 빠른 상담',
-            'body' => '물이 안 내려가서 급했는데 전화 상담이 바로 연결됐습니다.',
-            'rating' => 5,
-        ),
-        array(
-            'area' => '송파동',
-            'title' => '욕실 배수 악취 해결',
-            'body' => '원인을 자세히 설명해 주시고 필요한 작업만 안내해 주셨습니다.',
-            'rating' => 5,
-        ),
-    ),
+    /* 실제 확인된 후기만 추가합니다. */
+    'reviews' => array(),
 );
