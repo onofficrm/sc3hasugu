@@ -154,7 +154,7 @@ if (!function_exists('onoff_builder_resolve_import_entry')) {
      *
      * @return string 빈 문자열이면 렌더 불가(빌드 필요 등)
      */
-    function onoff_builder_resolve_import_entry($project_id, array $meta = null)
+    function onoff_builder_resolve_import_entry($project_id, $meta = null)
     {
         if (!onoff_builder_validate_project_id($project_id)) {
             return '';
@@ -219,7 +219,7 @@ if (!function_exists('onoff_builder_project_needs_build')) {
     /**
      * imports 메타 + 디스크 상태로 빌드 필요 여부 판단
      */
-    function onoff_builder_project_needs_build($project_id, array $import = null)
+    function onoff_builder_project_needs_build($project_id, $import = null)
     {
         if (!onoff_builder_validate_project_id($project_id)) {
             return false;

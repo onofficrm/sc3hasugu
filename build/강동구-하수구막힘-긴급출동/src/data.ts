@@ -15,6 +15,11 @@ export type LocalArea = {
   }>;
 };
 
+export type SiteFaq = {
+  question: string;
+  answer: string;
+};
+
 type SiteRuntimeConfig = {
   regionName?: string;
   regionShort?: string;
@@ -34,6 +39,7 @@ type SiteRuntimeConfig = {
   localAreas?: LocalArea[];
   activeAreaDetails?: LocalArea;
   areaSpots?: string[];
+  faqs?: SiteFaq[];
   builderProjectId?: string;
   assetBase?: string;
   activeArea?: string;
@@ -73,6 +79,7 @@ export const keywords = {
 export const localAreas = Array.isArray(runtime.localAreas) ? runtime.localAreas : [];
 
 export const areaSpots = Array.isArray(runtime.areaSpots) ? runtime.areaSpots : [];
+export const siteFaqs = Array.isArray(runtime.faqs) ? runtime.faqs : [];
 
 export const activeLocalArea =
   runtime.activeAreaDetails ||

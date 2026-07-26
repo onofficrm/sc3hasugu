@@ -22,7 +22,8 @@ if (!defined('_GNUBOARD_')) {
  */
 function g5_page_start($title)
 {
-    global $g5;
+    global $g5, $page_title, $page_description, $page_keywords,
+           $page_og_image, $page_canonical, $page_robots, $page_schema_type;
     $g5['title'] = $title;
     include_once(G5_PATH.'/head.php');
 }

@@ -795,7 +795,7 @@ if (!function_exists('onoff_builder_inject_site_profile')) {
 
         // 빌드 시점의 기본 메타를 제거하고 복사 사이트 설정으로 교체합니다.
         $html = preg_replace('/<title\b[^>]*>.*?<\/title>/is', '', $html);
-        $html = preg_replace('/<meta\b[^>]*(?:name|property)=["\'](?:description|keywords|robots|og:title|og:description|og:url)["\'][^>]*>\s*/i', '', $html);
+        $html = preg_replace('/<meta\b[^>]*(?:name|property)=["\'](?:description|keywords|robots|og:title|og:description|og:url|og:image|og:site_name|twitter:card|twitter:title|twitter:description|twitter:image)["\'][^>]*>\s*/i', '', $html);
         $html = preg_replace('/<link\b[^>]*rel=["\']canonical["\'][^>]*>\s*/i', '', $html);
 
         $json_options = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT;
@@ -806,12 +806,18 @@ if (!function_exists('onoff_builder_inject_site_profile')) {
 
         $business_id = rtrim($site_url, '/') . '/#business';
         $business = array(
-            '@type' => 'LocalBusiness',
+            '@type' => array('Organization', 'LocalBusiness'),
             '@id' => $business_id,
             'name' => isset($profile['companyName']) ? (string) $profile['companyName'] : $title,
             'url' => rtrim($site_url, '/') . '/',
             'areaServed' => isset($profile['regionName']) ? (string) $profile['regionName'] : '',
         );
+        if (!empty($profile['logoUrl'])) {
+            $business['logo'] = array(
+                '@type' => 'ImageObject',
+                'url' => (string) $profile['logoUrl'],
+            );
+        }
         if (!empty($profile['phone'])) {
             $business['telephone'] = (string) $profile['phone'];
         }
@@ -824,7 +830,30 @@ if (!function_exists('onoff_builder_inject_site_profile')) {
             );
         }
 
+        $website_id = rtrim($site_url, '/') . '/#website';
         $graph = array($business);
+        $graph[] = array(
+            '@type' => 'WebSite',
+            '@id' => $website_id,
+            'url' => rtrim($site_url, '/') . '/',
+            'name' => isset($profile['siteName']) ? (string) $profile['siteName'] : $title,
+            'description' => isset($profile['siteDescription']) ? (string) $profile['siteDescription'] : $description,
+            'publisher' => array('@id' => $business_id),
+            'inLanguage' => 'ko-KR',
+        );
+
+        $image_id = '';
+        if (!empty($profile['ogImage'])) {
+            $image_id = $canonical . '#primaryimage';
+            $graph[] = array(
+                '@type' => 'ImageObject',
+                '@id' => $image_id,
+                'url' => (string) $profile['ogImage'],
+                'contentUrl' => (string) $profile['ogImage'],
+                'caption' => $title,
+                'inLanguage' => 'ko-KR',
+            );
+        }
         $graph[] = array(
             '@type' => 'Service',
             '@id' => $canonical . '#service',
@@ -836,14 +865,20 @@ if (!function_exists('onoff_builder_inject_site_profile')) {
             'provider' => array('@id' => $business_id),
             'url' => $canonical,
         );
-        $graph[] = array(
+        $webpage = array(
             '@type' => 'WebPage',
             '@id' => $canonical . '#webpage',
             'url' => $canonical,
             'name' => $title,
             'description' => $description,
             'about' => array('@id' => $canonical . '#service'),
+            'isPartOf' => array('@id' => $website_id),
+            'inLanguage' => 'ko-KR',
         );
+        if ($image_id !== '') {
+            $webpage['primaryImageOfPage'] = array('@id' => $image_id);
+        }
+        $graph[] = $webpage;
 
         if (!empty($profile['activeArea'])) {
             $graph[] = array(
@@ -869,9 +904,16 @@ if (!function_exists('onoff_builder_inject_site_profile')) {
         $area_details = isset($profile['activeAreaDetails']) && is_array($profile['activeAreaDetails'])
             ? $profile['activeAreaDetails']
             : array();
+        $visible_faqs = array();
         if (!empty($area_details['faq']) && is_array($area_details['faq'])) {
+            $visible_faqs = $area_details['faq'];
+        }
+        if (!empty($profile['faqs']) && is_array($profile['faqs'])) {
+            $visible_faqs = array_merge($visible_faqs, $profile['faqs']);
+        }
+        if ($visible_faqs) {
             $faq_entities = array();
-            foreach ($area_details['faq'] as $faq) {
+            foreach ($visible_faqs as $faq) {
                 if (empty($faq['question']) || empty($faq['answer'])) {
                     continue;
                 }
@@ -912,10 +954,121 @@ if (!function_exists('onoff_builder_inject_site_profile')) {
             . '<meta property="og:title" content="' . $escape($title) . '">' . "\n"
             . '<meta property="og:description" content="' . $escape($description) . '">' . "\n"
             . '<meta property="og:url" content="' . $escape($canonical) . '">' . "\n"
+            . '<meta property="og:site_name" content="' . $escape(isset($profile['siteName']) ? $profile['siteName'] : $title) . '">' . "\n"
+            . (!empty($profile['ogImage']) ? '<meta property="og:image" content="' . $escape($profile['ogImage']) . '">' . "\n" : '')
+            . '<meta name="twitter:card" content="summary_large_image">' . "\n"
+            . '<meta name="twitter:title" content="' . $escape($title) . '">' . "\n"
+            . '<meta name="twitter:description" content="' . $escape($description) . '">' . "\n"
+            . (!empty($profile['ogImage']) ? '<meta name="twitter:image" content="' . $escape($profile['ogImage']) . '">' . "\n" : '')
+            . '<link rel="preload" as="image" href="' . $escape(rtrim($profile['assetBase'], '/') . '/images/drain-hero.webp') . '" type="image/webp" fetchpriority="high">' . "\n"
             . '<script>window.__SITE_CONFIG__=' . $profile_json . ';</script>' . "\n"
             . '<script type="application/ld+json">' . $schema_json . '</script>' . "\n";
 
-        return preg_replace('/<head([^>]*)>/i', '<head$1>' . $head, $html, 1);
+        $active_area = !empty($profile['activeArea'])
+            ? (string) $profile['activeArea']
+            : (isset($profile['regionName']) ? (string) $profile['regionName'] : '구리시');
+        $phone = isset($profile['phone']) ? (string) $profile['phone'] : '';
+        $tel = preg_replace('/[^0-9+]/', '', $phone);
+        $fallback = '<div class="seo-fallback">'
+            . '<header class="seo-fallback__hero">'
+            . '<p class="seo-fallback__eyebrow">WONJIN DRAIN · ' . $escape($active_area) . '</p>'
+            . '<h1>' . $escape($title) . '</h1>'
+            . '<p>' . $escape($description) . '</p>'
+            . ($tel !== '' ? '<a class="seo-fallback__call" href="tel:' . $escape($tel) . '">전화상담 ' . $escape($phone) . '</a>' : '')
+            . '</header><main class="seo-fallback__main">'
+            . '<section><h2>' . $escape($active_area) . ' 하수구청소 핵심 안내</h2>'
+            . '<p>물이 천천히 내려가거나 역류·악취가 반복되면 사용을 줄이고 막힌 위치와 발생 시점을 먼저 확인하세요. 배관 길이와 막힘 원인에 따라 점검 범위가 달라집니다.</p>'
+            . '<div class="seo-fallback__links">'
+            . '<a href="/page/service-sink.php">싱크대 막힘</a>'
+            . '<a href="/page/service-toilet.php">변기 막힘</a>'
+            . '<a href="/page/service-drain.php">배수구 막힘</a>'
+            . '<a href="/page/service-commercial.php">상가 하수구</a>'
+            . '</div></section>';
+
+        if (!empty($area_details)) {
+            $guide_title = !empty($area_details['guide_title'])
+                ? (string) $area_details['guide_title']
+                : $active_area . ' 배관 환경 안내';
+            $guide_body = !empty($area_details['guide_body'])
+                ? (string) $area_details['guide_body']
+                : '';
+            $fallback .= '<section><h2>' . $escape($guide_title) . '</h2>';
+            if ($guide_body !== '') {
+                $fallback .= '<p>' . $escape($guide_body) . '</p>';
+            }
+            if (!empty($area_details['issues']) && is_array($area_details['issues'])) {
+                $fallback .= '<ul>';
+                foreach ($area_details['issues'] as $issue) {
+                    $fallback .= '<li>' . $escape($issue) . '</li>';
+                }
+                $fallback .= '</ul>';
+            }
+            $fallback .= '</section>';
+        } elseif (!empty($profile['localAreas']) && is_array($profile['localAreas'])) {
+            $fallback .= '<section><h2>구리 동별 하수구청소 안내</h2><div class="seo-fallback__links">';
+            foreach ($profile['localAreas'] as $area) {
+                if (empty($area['name'])) {
+                    continue;
+                }
+                $area_url = !empty($area['url']) ? (string) $area['url'] : '#';
+                $fallback .= '<a href="' . $escape($area_url) . '">' . $escape($area['name']) . ' 하수구청소</a>';
+            }
+            $fallback .= '</div></section>';
+        }
+
+        $guide_links = array(
+            '/page/guide-drain-cost.php' => '하수구청소 비용이 달라지는 기준',
+            '/page/guide-slow-sink.php' => '싱크대 물이 천천히 내려갈 때',
+            '/page/guide-toilet-overflow.php' => '변기 물이 차오를 때',
+            '/page/guide-drain-odor.php' => '배수구 악취 원인과 관리',
+            '/page/guide-restaurant-drain.php' => '음식점 주방 배관 관리',
+            '/page/guide-plunger-failure.php' => '뚫어뻥으로 해결되지 않는 이유',
+        );
+        $fallback .= '<section><h2>증상별 배관 관리 안내</h2><div class="seo-fallback__links">';
+        foreach ($guide_links as $guide_url => $guide_label) {
+            $fallback .= '<a href="' . $escape($guide_url) . '">' . $escape($guide_label) . '</a>';
+        }
+        $fallback .= '</div></section>';
+
+        if ($visible_faqs) {
+            $fallback .= '<section><h2>자주 묻는 질문</h2><div class="seo-fallback__faq">';
+            foreach ($visible_faqs as $faq) {
+                if (empty($faq['question']) || empty($faq['answer'])) {
+                    continue;
+                }
+                $fallback .= '<article><h3>' . $escape($faq['question']) . '</h3><p>' . $escape($faq['answer']) . '</p></article>';
+            }
+            $fallback .= '</div></section>';
+        }
+        $fallback .= '</main></div>';
+
+        $fallback_style = '<style>'
+            . '.seo-fallback{font-family:Arial,"Noto Sans KR",sans-serif;color:#0f172a;background:#fff;line-height:1.65}'
+            . '.seo-fallback__hero{padding:7.5rem max(1.25rem,calc((100% - 72rem)/2)) 5rem;background:#020617;color:#fff}'
+            . '.seo-fallback__hero h1{max-width:52rem;margin:.5rem 0 1rem;font-size:clamp(2.25rem,6vw,4.5rem);line-height:1.08}'
+            . '.seo-fallback__hero p{max-width:46rem;font-size:1.1rem;color:#cbd5e1}'
+            . '.seo-fallback__eyebrow{font-size:.8rem!important;font-weight:800;letter-spacing:.14em;color:#fb923c!important}'
+            . '.seo-fallback__call{display:inline-block;margin-top:1.5rem;padding:1rem 1.25rem;border-radius:1rem;background:#f97316;color:#fff;text-decoration:none;font-weight:800}'
+            . '.seo-fallback__main{max-width:72rem;margin:auto;padding:2rem 1.25rem 5rem}'
+            . '.seo-fallback section{padding:2.5rem 0;border-bottom:1px solid #e2e8f0}'
+            . '.seo-fallback h2{margin:0 0 1rem;font-size:clamp(1.6rem,4vw,2.25rem)}'
+            . '.seo-fallback h3{font-size:1.05rem;margin:0 0 .35rem}'
+            . '.seo-fallback__links{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:.75rem}'
+            . '.seo-fallback__links a,.seo-fallback__faq article{padding:1rem;border:1px solid #e2e8f0;border-radius:1rem;background:#f8fafc;color:#0f172a;text-decoration:none}'
+            . '.seo-fallback__faq{display:grid;gap:.75rem}.seo-fallback__faq p{margin:0;color:#475569}'
+            . '</style>';
+
+        $html = preg_replace('/<head([^>]*)>/i', '<head$1>' . $head . $fallback_style, $html, 1);
+        $html = preg_replace_callback(
+            '/(<div\b[^>]*\bid=["\']root["\'][^>]*>)\s*(<\/div>)/i',
+            function ($matches) use ($fallback) {
+                return $matches[1] . $fallback . $matches[2];
+            },
+            $html,
+            1
+        );
+
+        return $html;
     }
 }
 

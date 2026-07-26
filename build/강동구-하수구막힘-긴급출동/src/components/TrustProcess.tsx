@@ -18,8 +18,12 @@ export const Equipment = () => {
             >
               <img
                 src={assetUrl('drain-equipment.webp')}
-                alt="배관 내시경과 전문 하수구 청소 장비"
+                alt="배관 내시경과 하수구 점검 장비"
                 className="absolute inset-0 w-full h-full object-cover"
+                width={1600}
+                height={1066}
+                loading="lazy"
+                decoding="async"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent"></div>
               <div className="absolute bottom-8 left-8 right-8">
@@ -30,7 +34,7 @@ export const Equipment = () => {
                     </div>
                     <div>
                       <p className="font-extrabold text-lg md:text-xl mb-1">배관 상태에 맞는 점검 장비</p>
-                      <p className="text-slate-200 font-medium text-sm md:text-base">눈대중이 아닌 정확한 원인 파악을 위해 전문 장비로 점검합니다.</p>
+                      <p className="text-slate-200 font-medium text-sm md:text-base">배관 상태와 막힘 위치를 확인하는 데 필요한 장비를 사용합니다.</p>
                     </div>
                   </div>
                 </div>
@@ -57,7 +61,7 @@ export const Equipment = () => {
               <div className="space-y-8 mb-10">
                 <div className="relative pl-6 before:absolute before:left-0 before:top-1.5 before:w-1.5 before:h-1.5 before:bg-orange-500 before:rounded-full">
                   <h3 className="text-xl font-bold text-slate-900 mb-2">
-                    전문 장비로 막힘 위치 확인
+                    배관 점검 장비로 막힘 위치 확인
                   </h3>
                   <p className="text-slate-600 font-medium break-keep leading-relaxed text-base">
                     눈에 보이는 입구만 확인하는 것이 아니라, 막힘이 발생한 위치와 배관 흐름을 함께 확인하는 것이 중요합니다.
@@ -154,7 +158,7 @@ export const Process = () => {
     {
       num: "04",
       icon: <Wrench className="w-6 h-6" />,
-      title: "전문 장비 작업",
+      title: "배관 상태별 장비 작업",
       desc: "현장 상황에 맞는 장비로 막힘·오염을 처리합니다."
     },
     {

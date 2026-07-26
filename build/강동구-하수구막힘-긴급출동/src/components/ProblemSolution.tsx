@@ -19,7 +19,15 @@ export const Symptoms = () => (
           viewport={{ once: true }}
           className="relative overflow-hidden rounded-[2rem] min-h-[430px] md:min-h-[560px] shadow-2xl"
         >
-          <img src={assetUrl('sink-service.webp')} alt="싱크대 배관 내시경 점검" className="absolute inset-0 w-full h-full object-cover" />
+          <img
+            src={assetUrl('sink-service.webp')}
+            alt="싱크대 배관 내시경 점검"
+            className="absolute inset-0 w-full h-full object-cover"
+            width={1600}
+            height={1066}
+            loading="lazy"
+            decoding="async"
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
           <div className="absolute left-5 right-5 bottom-5 md:left-8 md:right-8 md:bottom-8 p-5 md:p-6 rounded-2xl bg-white/95 backdrop-blur shadow-xl">
             <p className="text-orange-500 font-extrabold text-sm mb-1">증상이 반복된다면</p>
@@ -112,7 +120,15 @@ export const Services = () => (
             transition={{ delay: idx * 0.08 }}
             className="group relative min-h-[420px] md:min-h-[520px] overflow-hidden rounded-[2rem] bg-slate-800"
           >
-            <img src={image} alt={title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            <img
+              src={image}
+              alt={title}
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              width={1600}
+              height={1066}
+              loading="lazy"
+              decoding="async"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/15 to-transparent" />
             <div className="absolute inset-x-0 bottom-0 p-6 md:p-8">
               <span className="mb-4 flex items-center justify-center w-12 h-12 rounded-2xl bg-orange-500 text-white shadow-lg">
@@ -147,7 +163,15 @@ export const ContextTypes = () => (
             [assetUrl('drain-equipment.webp'), '전문장비'],
           ].map(([image, label]) => (
             <div key={label} className="relative aspect-[3/4] overflow-hidden rounded-2xl md:rounded-3xl">
-              <img src={image} alt={label} className="absolute inset-0 w-full h-full object-cover" />
+              <img
+                src={image}
+                alt={label}
+                className="absolute inset-0 w-full h-full object-cover"
+                width={1600}
+                height={1066}
+                loading="lazy"
+                decoding="async"
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent" />
               <strong className="absolute left-3 right-3 bottom-3 md:left-5 md:bottom-5 text-white text-sm md:text-lg">{label}</strong>
             </div>

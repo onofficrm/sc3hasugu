@@ -202,8 +202,41 @@ if (!function_exists('g5site_public_profile')) {
                 : array();
         }
 
+        $region_name = isset($clone['region_name']) ? (string) $clone['region_name'] : '지역';
+        $company_name = g5site_cfg('company_name', '원진하수구');
+        $common_faqs = array(
+            array(
+                'question' => $region_name . ' 전 지역 하수구청소가 가능한가요?',
+                'answer' => $company_name . '는 ' . $region_name . ' 주요 동의 하수구청소·막힘 전화상담이 가능합니다. 위치와 일정에 따라 출동 가능 여부를 안내합니다.',
+            ),
+            array(
+                'question' => $region_name . ' 하수구청소 비용은 어떻게 정해지나요?',
+                'answer' => '배관 길이, 막힘 위치와 정도, 필요한 장비와 작업 범위에 따라 달라집니다. 현장 상태를 확인한 뒤 작업 전 범위와 비용을 안내받는 것이 안전합니다.',
+            ),
+            array(
+                'question' => '아파트 싱크대·배수구 청소도 가능한가요?',
+                'answer' => '아파트 주방 싱크대, 욕실 배수구, 베란다 배수 막힘도 전화로 증상을 확인한 뒤 일정과 점검 방향을 안내합니다.',
+            ),
+            array(
+                'question' => '상가·음식점 주방 하수구도 가능한가요?',
+                'answer' => '상가와 음식점 주방 배수 막힘도 전화상담이 가능합니다. 영업 시간과 배수 증상을 알려주시면 일정과 확인 항목을 안내합니다.',
+            ),
+            array(
+                'question' => '변기 막힘은 어떻게 상담하나요?',
+                'answer' => '변기 물이 내려가지 않거나 차오르는 증상을 전화로 먼저 확인합니다. 물티슈나 이물질 유입 가능성과 다른 배수구의 상태를 함께 알려주세요.',
+            ),
+            array(
+                'question' => '밤이나 주말에도 출동이 가능한가요?',
+                'answer' => '출동 가능 시간은 현장 위치와 현재 일정에 따라 달라집니다. 전화상담 시 가능한 시간과 대응 여부를 확인해 주세요.',
+            ),
+            array(
+                'question' => '뚫어뻥으로 해결되지 않으면 어떻게 해야 하나요?',
+                'answer' => '배관 깊은 곳의 이물질이나 기름층, 단단한 물체가 원인일 수 있습니다. 반복해서 압력을 가하기보다 여러 배수구의 증상을 확인한 뒤 상담해 주세요.',
+            ),
+        );
+
         return array(
-            'regionName'       => isset($clone['region_name']) ? (string) $clone['region_name'] : '지역',
+            'regionName'       => $region_name,
             'regionShort'      => isset($clone['region_short']) ? (string) $clone['region_short'] : '지역',
             'regionInitial'    => isset($clone['region_initial']) ? (string) $clone['region_initial'] : '긴',
             'siteName'         => g5site_cfg('site_name', ''),
@@ -214,12 +247,15 @@ if (!function_exists('g5site_public_profile')) {
             'phone'            => g5site_cfg('phone', ''),
             'email'            => g5site_cfg('email', ''),
             'address'          => g5site_cfg('address', ''),
+            'logoUrl'          => g5site_cfg_url('logo_path', ''),
+            'ogImage'          => g5site_cfg_url('og_image', ''),
             'seoTitle'         => g5site_cfg('seo_title', ''),
             'seoDescription'   => g5site_cfg('seo_description', ''),
             'mainKeyword'      => g5site_cfg('main_keyword', ''),
             'secondaryKeywords'=> $sub_keywords,
             'localAreas'       => $array_value('local_areas'),
             'areaSpots'        => $array_value('area_spots'),
+            'faqs'             => $common_faqs,
             'reviews'          => $array_value('reviews'),
             'builderProjectId' => g5site_cfg('home_builder_bridge_id', 'gangdong-drain'),
         );

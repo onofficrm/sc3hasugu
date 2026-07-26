@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronDown, ShieldAlert, PhoneCall } from 'lucide-react';
-import { activeLocalArea, assetUrl, contactInfo, getDongFromUrl, keywords, phoneCtaLabel, phoneCtaSubLabel, regionName, telHref } from '../data';
+import { activeLocalArea, assetUrl, contactInfo, getDongFromUrl, keywords, phoneCtaLabel, phoneCtaSubLabel, regionName, siteFaqs, telHref } from '../data';
 
 export const Notices = () => {
   const promises = [
@@ -19,6 +19,10 @@ export const Notices = () => {
               src={assetUrl('commercial-drain.webp')}
               alt="상가 하수구 현장 점검"
               className="absolute inset-0 w-full h-full object-cover"
+              width={1600}
+              height={1066}
+              loading="lazy"
+              decoding="async"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent" />
             <div className="absolute left-6 right-6 bottom-6 md:left-8 md:bottom-8">
@@ -52,45 +56,25 @@ export const Notices = () => {
 };
 
 export const FAQ = () => {
-  const brand = contactInfo.companyName;
   const localFaqs = (activeLocalArea?.faq || []).map((item) => ({
     q: item.question,
     a: item.answer,
   }));
+  const commonFaqs = siteFaqs.length
+    ? siteFaqs.map((item) => ({ q: item.question, a: item.answer }))
+    : [
+        {
+          q: `${regionName} 하수구청소 비용은 어떻게 정해지나요?`,
+          a: '배관 길이, 막힘 위치와 정도, 필요한 장비와 작업 범위에 따라 달라집니다. 현장 확인 후 작업 전 범위와 비용을 안내받는 것이 안전합니다.',
+        },
+        {
+          q: '뚫어뻥으로 해결되지 않으면 어떻게 해야 하나요?',
+          a: '배관 깊은 곳의 이물질이나 기름층이 원인일 수 있습니다. 반복해서 압력을 가하기보다 여러 배수구의 증상을 확인한 뒤 상담해 주세요.',
+        },
+      ];
   const faqs = [
     ...localFaqs,
-    {
-      q: `${regionName} 전 지역 하수구청소가 가능한가요?`,
-      a: `네. ${brand}는 ${regionName} 주요 동 하수구청소·막힘 전화상담이 가능합니다. 아파트·상가 위치에 따라 출동 가능 여부를 안내드립니다.`
-    },
-    {
-      q: `${regionName} 하수구청소 비용은 어떻게 되나요?`,
-      a: "배관 길이, 막힘 정도, 장비 사용 범위에 따라 달라집니다. 전화로 증상과 주소를 알려주시면 가능한 범위에서 안내드립니다. 현장 확인 후 정확한 견적을 말씀드립니다."
-    },
-    {
-      q: "아파트 싱크대·배수구 청소도 되나요?",
-      a: `가능합니다. ${regionName} 아파트 단지 주방 싱크대, 욕실 배수구, 베란다 배수 막힘도 전화상담 후 일정에 맞춰 안내합니다.`
-    },
-    {
-      q: "상가·음식점 주방 하수구도 가능한가요?",
-      a: "상가·음식점 주방 배수 막힘도 대응합니다. 영업 시간에 맞춰 전화로 먼저 상황을 확인해 주세요."
-    },
-    {
-      q: "변기 막힘도 전화상담만으로 안내받을 수 있나요?",
-      a: "네. 변기 물이 안 내려가거나 차오르는 증상도 전화로 먼저 확인합니다. 상담·일정 안내는 전화로만 진행합니다."
-    },
-    {
-      q: `밤·주말에도 ${regionName} 출동이 되나요?`,
-      a: "출동 가능 시간은 현장 위치와 현재 일정에 따라 달라집니다. 전화상담 시 가능한 시간과 대응 여부를 확인해 주세요."
-    },
-    {
-      q: "뚫어뻥으로 안 되면 어떻게 하나요?",
-      a: "입구가 아니라 배관 안쪽 이물질·스케일인 경우가 많습니다. 반복 막힘이라면 전문 장비 점검이 필요할 수 있어 전화로 증상을 자세히 알려 주세요."
-    },
-    {
-      q: `${brand}와 다른 업체 차이는 뭔가요?`,
-      a: `${brand}는 ${regionName} 동별 배관 환경과 증상을 먼저 확인합니다. 온라인 신청 없이 전화로 위치와 증상을 듣고 필요한 확인 항목을 안내합니다.`
-    }
+    ...commonFaqs,
   ];
 
   const [openIdx, setOpenIdx] = useState<number | null>(0);
@@ -152,7 +136,15 @@ export const FinalCTA = () => {
   const area = getDongFromUrl() || regionName;
   return (
     <section id="contact" className="py-24 md:py-32 bg-slate-900 relative overflow-hidden scroll-mt-20">
-      <img src={assetUrl('drain-hero.webp')} alt="" className="absolute inset-0 w-full h-full object-cover object-[70%_center]" />
+      <img
+        src={assetUrl('drain-hero.webp')}
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover object-[70%_center]"
+        width={1600}
+        height={1066}
+        loading="lazy"
+        decoding="async"
+      />
       <div className="absolute inset-0 bg-slate-950/80"></div>
       <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
         <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight tracking-tight break-keep">

@@ -293,6 +293,22 @@
   line-height: var(--line-height-relaxed);
 }
 
+.page-template .page-breadcrumb {
+  margin-bottom: var(--space-lg);
+  font-size: var(--font-size-sm);
+  color: var(--color-muted);
+}
+
+.page-template .page-breadcrumb a {
+  color: inherit;
+}
+
+.page-template .page-meta {
+  margin: var(--space-md) auto 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-muted);
+}
+
 /* Section */
 .page-template .page-section {
   padding: var(--section-padding-y) 0;
@@ -313,6 +329,36 @@
 .page-template .page-section__desc {
   margin: 0 0 var(--space-xl);
   max-width: 42em;
+  color: var(--color-muted);
+  line-height: var(--line-height-relaxed);
+}
+
+.page-template .page-section__subtitle {
+  margin: var(--space-xl) 0 var(--space-sm);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.page-template .page-inner--narrow {
+  max-width: 880px;
+}
+
+.page-template.page-guide .faq-list {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.page-template.page-guide .faq-item {
+  padding: var(--space-lg);
+}
+
+.page-template.page-guide .faq-item h3 {
+  margin: 0 0 var(--space-sm);
+  font-size: var(--font-size-lg);
+}
+
+.page-template.page-guide .faq-item p {
+  margin: 0;
   color: var(--color-muted);
   line-height: var(--line-height-relaxed);
 }

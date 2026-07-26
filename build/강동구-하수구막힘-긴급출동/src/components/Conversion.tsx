@@ -10,6 +10,39 @@ import {
   telHref,
 } from '../data';
 
+const guideLinks = [
+  {
+    href: '/page/guide-drain-cost.php',
+    title: '하수구청소 비용이 달라지는 기준',
+    answer: '막힘 위치, 배관 길이, 오염 정도와 필요한 장비 범위에 따라 달라집니다.',
+  },
+  {
+    href: '/page/guide-slow-sink.php',
+    title: '싱크대 물이 천천히 내려갈 때',
+    answer: '입구 청소 후에도 반복되면 배관 안쪽 기름때와 이물질을 확인해야 합니다.',
+  },
+  {
+    href: '/page/guide-toilet-overflow.php',
+    title: '변기 물이 차오를 때',
+    answer: '다시 물을 내리지 말고 급수 밸브를 잠근 뒤 주변의 물 사용을 줄이세요.',
+  },
+  {
+    href: '/page/guide-drain-odor.php',
+    title: '배수구 악취 원인과 관리',
+    answer: '트랩의 물, 입구 오염, 연결부 틈과 배관 내부 상태를 순서대로 확인합니다.',
+  },
+  {
+    href: '/page/guide-restaurant-drain.php',
+    title: '음식점 주방 배관 관리',
+    answer: '배수 시간과 그리스트랩 상태를 기록해 업종과 사용량에 맞는 주기를 정합니다.',
+  },
+  {
+    href: '/page/guide-plunger-failure.php',
+    title: '뚫어뻥으로 해결되지 않는 이유',
+    answer: '깊은 막힘, 단단한 이물질과 공용 배관 문제는 압축만으로 해결하기 어렵습니다.',
+  },
+];
+
 export const TrustSignals = () => (
   <div className="flex flex-wrap gap-2">
     <span className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-orange-500 text-white text-sm font-extrabold shadow-lg shadow-orange-500/30">
@@ -150,3 +183,35 @@ export const NeighborhoodGuide = () => {
     </section>
   );
 };
+
+export const GuideHub = () => (
+  <section id="guide-hub" className="py-20 md:py-28 bg-slate-50 scroll-mt-20">
+    <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-3xl mb-10">
+        <p className="text-orange-500 font-extrabold tracking-widest text-sm mb-3">DRAIN ANSWER GUIDE</p>
+        <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight break-keep mb-5">
+          증상별 핵심 답변과 안전한 확인 순서
+        </h2>
+        <p className="text-slate-600 text-lg font-medium leading-relaxed break-keep">
+          비용을 단정하거나 무리한 자가 작업을 권하지 않습니다. 현재 증상에 가까운 안내에서
+          원인 범위와 전화상담 전 확인할 내용을 먼저 살펴보세요.
+        </p>
+      </div>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {guideLinks.map((guide) => (
+          <article key={guide.href} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h3 className="text-xl font-black text-slate-900 mb-3 break-keep">{guide.title}</h3>
+            <p className="text-slate-600 text-sm font-medium leading-relaxed break-keep">{guide.answer}</p>
+            <a
+              href={guide.href}
+              className="mt-5 inline-flex items-center gap-1 text-orange-600 font-extrabold text-sm hover:text-orange-700"
+              aria-label={`${guide.title} 안내 자세히 보기`}
+            >
+              확인 순서 보기 →
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+);

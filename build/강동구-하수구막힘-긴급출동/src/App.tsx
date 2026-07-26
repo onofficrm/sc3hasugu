@@ -3,7 +3,7 @@ import { Symptoms, Services, ContextTypes } from './components/ProblemSolution';
 import { Equipment, Process, Areas } from './components/TrustProcess';
 import { CaseGallery } from './components/CaseGallery';
 import { Notices, FAQ, FinalCTA, Footer } from './components/Support';
-import { NeighborhoodGuide } from './components/Conversion';
+import { GuideHub, NeighborhoodGuide } from './components/Conversion';
 
 export default function App() {
   return (
@@ -15,6 +15,7 @@ export default function App() {
         <Services />
         <ContextTypes />
         <NeighborhoodGuide />
+        <GuideHub />
         <Equipment />
         <Process />
         <Areas />

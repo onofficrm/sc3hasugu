@@ -28,7 +28,7 @@ export const Header = () => {
           <button onClick={() => scrollTo('areas')} className="text-sm font-bold text-slate-700 hover:text-orange-500 transition-colors">출동지역</button>
           <a href="/bbs/board.php?bo_table=notice" className="text-sm font-bold text-slate-700 hover:text-orange-500 transition-colors">시공사례</a>
           <button onClick={() => scrollTo('area-guide')} className="text-sm font-bold text-slate-700 hover:text-orange-500 transition-colors">지역안내</button>
-          <button onClick={() => scrollTo('faq')} className="text-sm font-bold text-slate-700 hover:text-orange-500 transition-colors">FAQ</button>
+          <button onClick={() => scrollTo('guide-hub')} className="text-sm font-bold text-slate-700 hover:text-orange-500 transition-colors">배관정보</button>
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
@@ -67,8 +67,13 @@ export const Hero = () => {
       <section className="relative min-h-[720px] md:min-h-[780px] flex items-end overflow-hidden bg-slate-950 pt-24">
         <img
           src={assetUrl('drain-hero.webp')}
-          alt={`${regionName} 하수구 전문 기사의 배관 내시경 점검`}
+          alt={`${regionName} 하수구 배관 점검 안내`}
           className="absolute inset-0 w-full h-full object-cover object-[68%_center]"
+          width={1600}
+          height={1066}
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/75 to-slate-950/5" />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-slate-950/25" />
@@ -116,7 +121,7 @@ export const Hero = () => {
             </a>
 
             <div className="mt-8 flex flex-wrap gap-2">
-              {['내시경 점검', '전문 장비', `${area} 출동`].map((point) => (
+              {['내시경 점검', '배관 점검 장비', `${area} 출동 안내`].map((point) => (
                 <span key={point} className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-950/50 text-slate-100 text-sm font-bold border border-white/10">
                   <CheckCircle2 className="w-4 h-4 text-orange-500" /> {point}
                 </span>
