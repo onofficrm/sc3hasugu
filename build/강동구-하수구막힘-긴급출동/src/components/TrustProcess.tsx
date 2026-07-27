@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { Wrench, Search, MapPin, ShieldCheck, CheckCircle2, Info, PhoneCall, MessageSquare, ClipboardList, Sparkles } from 'lucide-react';
-import { areaSpots, assetUrl, localAreas, localAreaUrl, phoneCtaLabel, phoneCtaSubLabel, regionName, telHref } from '../data';
+import { areaSpots, assetUrl, localAreas, localAreaUrl, localClogUrl, phoneCtaLabel, phoneCtaSubLabel, regionName, telHref } from '../data';
 
 export const Equipment = () => {
   return (
@@ -266,21 +266,32 @@ export const Areas = () => {
 
             <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6 break-keep">
               구리 동네별<br className="hidden sm:block" />
-              <span className="underline decoration-orange-500 decoration-4 underline-offset-4">하수구청소 안내</span>
+              <span className="underline decoration-orange-500 decoration-4 underline-offset-4">하수구청소·막힘 안내</span>
             </h2>
 
             <p className="text-slate-600 text-lg font-bold mb-6 break-keep">
-              {areaSummary || regionName} 등 지역별 페이지에서 바로 전화상담이 가능합니다.
+              {areaSummary || regionName} 등 지역별 하수구청소·하수구막힘 페이지에서 바로 전화상담이 가능합니다.
             </p>
 
-            <div className="flex flex-wrap gap-2 md:gap-3 mb-6">
+            <div className="flex flex-wrap gap-2 md:gap-3 mb-4">
               {localAreas.map((area) => (
                 <a
-                  key={area.slug}
+                  key={`${area.slug}-clean`}
                   href={localAreaUrl(area)}
                   className="px-4 py-2.5 bg-white border border-slate-200 text-slate-800 rounded-xl font-extrabold text-sm shadow-sm hover:border-orange-400 hover:text-orange-600 transition-colors"
                 >
-                  {area.name}
+                  {area.name} 청소
+                </a>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-2 md:gap-3 mb-6">
+              {localAreas.map((area) => (
+                <a
+                  key={`${area.slug}-clog`}
+                  href={localClogUrl(area)}
+                  className="px-4 py-2.5 bg-slate-900 text-white rounded-xl font-extrabold text-sm shadow-sm hover:bg-orange-500 transition-colors"
+                >
+                  {area.name} 막힘
                 </a>
               ))}
             </div>

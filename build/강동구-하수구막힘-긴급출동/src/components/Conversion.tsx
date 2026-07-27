@@ -2,11 +2,15 @@ import { CheckCircle2, Clock, MapPin, Phone, Wrench } from 'lucide-react';
 import {
   activeLocalArea,
   getDongFromUrl,
+  isClogFocus,
   localAreas,
   localAreaUrl,
+  localClogUrl,
   phoneCtaLabel,
   phoneCtaSubLabel,
   regionName,
+  relatedCleanUrl,
+  relatedClogUrl,
   telHref,
 } from '../data';
 
@@ -103,10 +107,9 @@ export const NeighborhoodGuide = () => {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {localAreas.map((item) => (
-              <a
+              <article
                 key={item.slug}
-                href={localAreaUrl(item)}
-                className="group rounded-3xl border border-slate-200 bg-slate-50 p-6 hover:border-orange-400 hover:bg-white hover:shadow-xl transition-all"
+                className="rounded-3xl border border-slate-200 bg-slate-50 p-6 hover:border-orange-400 hover:bg-white hover:shadow-xl transition-all"
               >
                 <span className="inline-flex mb-4 px-3 py-1.5 rounded-full bg-orange-100 text-orange-600 text-xs font-extrabold">
                   {item.label}
@@ -115,10 +118,15 @@ export const NeighborhoodGuide = () => {
                 <p className="text-slate-600 text-sm font-medium leading-relaxed line-clamp-3 break-keep">
                   {item.guide_body}
                 </p>
-                <span className="mt-5 inline-flex items-center gap-1 text-orange-600 font-extrabold text-sm">
-                  지역 안내 보기 →
-                </span>
-              </a>
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <a href={localAreaUrl(item)} className="inline-flex items-center gap-1 text-orange-600 font-extrabold text-sm">
+                    하수구청소 안내 →
+                  </a>
+                  <a href={localClogUrl(item)} className="inline-flex items-center gap-1 text-slate-700 font-extrabold text-sm">
+                    하수구막힘 안내 →
+                  </a>
+                </div>
+              </article>
             ))}
           </div>
         </div>
@@ -134,12 +142,16 @@ export const NeighborhoodGuide = () => {
           <span className="mx-2">/</span>
           <a href="/#areas" className="hover:text-orange-600">{regionName}</a>
           <span className="mx-2">/</span>
-          <span aria-current="page" className="text-slate-800">{area.name} 하수구청소</span>
+          <span aria-current="page" className="text-slate-800">
+            {area.name} {isClogFocus ? '하수구막힘' : '하수구청소'}
+          </span>
         </nav>
 
         <div className="grid lg:grid-cols-[1.2fr_.8fr] gap-8 items-start">
           <article>
-            <p className="text-orange-500 font-extrabold tracking-widest text-sm mb-3">LOCAL DRAIN GUIDE</p>
+            <p className="text-orange-500 font-extrabold tracking-widest text-sm mb-3">
+              {isClogFocus ? 'LOCAL CLOG GUIDE' : 'LOCAL DRAIN GUIDE'}
+            </p>
             <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight break-keep mb-6">
               {area.guide_title}
             </h2>
@@ -147,7 +159,9 @@ export const NeighborhoodGuide = () => {
               {area.guide_body}
             </p>
 
-            <h3 className="text-xl font-black text-slate-900 mb-4">{area.name}에서 자주 확인하는 증상</h3>
+            <h3 className="text-xl font-black text-slate-900 mb-4">
+              {area.name}에서 자주 확인하는 {isClogFocus ? '막힘 증상' : '증상'}
+            </h3>
             <ul className="grid sm:grid-cols-2 gap-3">
               {(area.issues || []).map((issue) => (
                 <li key={issue} className="flex items-start gap-3 rounded-2xl bg-slate-50 border border-slate-100 p-4 text-slate-700 font-bold">
@@ -156,6 +170,24 @@ export const NeighborhoodGuide = () => {
                 </li>
               ))}
             </ul>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              {isClogFocus ? (
+                <a
+                  href={relatedCleanUrl(area)}
+                  className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-extrabold text-slate-800 hover:border-orange-400 hover:text-orange-600"
+                >
+                  {area.name} 하수구청소 안내 보기
+                </a>
+              ) : (
+                <a
+                  href={relatedClogUrl(area)}
+                  className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-extrabold text-slate-800 hover:border-orange-400 hover:text-orange-600"
+                >
+                  {area.name} 하수구막힘 안내 보기
+                </a>
+              )}
+            </div>
           </article>
 
           <aside className="rounded-[2rem] bg-slate-900 text-white p-7 md:p-8 shadow-xl">

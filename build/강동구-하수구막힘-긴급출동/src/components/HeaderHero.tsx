@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { Phone, CheckCircle2, ShieldCheck, MapPin, Wrench } from 'lucide-react';
-import { assetUrl, contactInfo, getDongFromUrl, keywords, phoneCtaLabel, phoneCtaSubLabel, regionInitial, regionName, telHref } from '../data';
+import { assetUrl, contactInfo, getDongFromUrl, isClogFocus, keywords, phoneCtaLabel, phoneCtaSubLabel, regionInitial, regionName, telHref } from '../data';
 import { TrustSignals } from './Conversion';
 
 export const Header = () => {
@@ -19,7 +19,9 @@ export const Header = () => {
           </div>
           <div>
             <span className="font-extrabold text-lg md:text-2xl tracking-tight text-slate-900 leading-none">{contactInfo.companyName}</span>
-            <p className="hidden md:block text-[11px] text-slate-500 font-medium mt-0.5 tracking-tight">{area} 하수구청소 · 전화상담</p>
+            <p className="hidden md:block text-[11px] text-slate-500 font-medium mt-0.5 tracking-tight">
+              {area} {isClogFocus ? '하수구막힘' : '하수구청소'} · 전화상담
+            </p>
           </div>
         </a>
 
@@ -60,7 +62,9 @@ export const Header = () => {
 export const Hero = () => {
   const activeArea = getDongFromUrl();
   const area = activeArea || regionName;
-  const primaryKeyword = activeArea ? `${activeArea} 하수구청소` : keywords.main;
+  const primaryKeyword = activeArea
+    ? (keywords.main || `${activeArea} ${isClogFocus ? '하수구막힘' : '하수구청소'}`)
+    : keywords.main;
 
   return (
     <>

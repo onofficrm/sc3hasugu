@@ -3,6 +3,9 @@ export type LocalArea = {
   name: string;
   label: string;
   url?: string;
+  clog_url?: string;
+  clean_url?: string;
+  focus?: 'clean' | 'clog' | string;
   meta_title?: string;
   meta_description?: string;
   guide_title?: string;
@@ -10,6 +13,15 @@ export type LocalArea = {
   issues?: string[];
   spots?: string[];
   faq?: Array<{
+    question: string;
+    answer: string;
+  }>;
+  clog_meta_title?: string;
+  clog_meta_description?: string;
+  clog_guide_title?: string;
+  clog_guide_body?: string;
+  clog_issues?: string[];
+  clog_faq?: Array<{
     question: string;
     answer: string;
   }>;
@@ -44,6 +56,7 @@ type SiteRuntimeConfig = {
   assetBase?: string;
   activeArea?: string;
   canonical?: string;
+  pageFocus?: 'clean' | 'clog' | string;
 };
 
 declare global {
@@ -93,8 +106,23 @@ export function assetUrl(filename: string) {
   return `${base}/images/${filename.replace(/^\/+/, '')}`;
 }
 
+export const pageFocus = (runtime.pageFocus || activeLocalArea?.focus || 'clean').trim();
+export const isClogFocus = pageFocus === 'clog';
+
 export function localAreaUrl(area: LocalArea) {
   return area.url || `/page/local-${area.slug}.php`;
+}
+
+export function localClogUrl(area: LocalArea) {
+  return area.clog_url || `/page/clog-${area.slug}.php`;
+}
+
+export function relatedCleanUrl(area: LocalArea = activeLocalArea || { slug: '', name: '', label: '' }) {
+  return area.clean_url || area.url || (area.slug ? `/page/local-${area.slug}.php` : '/#areas');
+}
+
+export function relatedClogUrl(area: LocalArea = activeLocalArea || { slug: '', name: '', label: '' }) {
+  return area.clog_url || (area.slug ? `/page/clog-${area.slug}.php` : '/#areas');
 }
 
 export function phoneCtaLabel(area = regionName) {
@@ -119,7 +147,7 @@ export function getDongFromUrl() {
   const params = new URLSearchParams(window.location.search);
   const fromQuery = (params.get('dong') || params.get('area') || '').trim();
   if (fromQuery) return fromQuery;
-  const match = window.location.pathname.match(/\/page\/local-([a-z0-9-]+)\.php/i);
+  const match = window.location.pathname.match(/\/page\/(?:local|clog)-([a-z0-9-]+)\.php/i);
   if (match) {
     const found = localAreas.find((a) => a.slug === match[1]);
     if (found) return found.name;

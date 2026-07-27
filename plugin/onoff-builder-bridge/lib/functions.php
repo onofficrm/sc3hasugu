@@ -854,11 +854,13 @@ if (!function_exists('onoff_builder_inject_site_profile')) {
                 'inLanguage' => 'ko-KR',
             );
         }
+        $page_focus = !empty($profile['pageFocus']) ? (string) $profile['pageFocus'] : 'clean';
+        $service_type = ($page_focus === 'clog') ? '하수구막힘' : '하수구청소';
         $graph[] = array(
             '@type' => 'Service',
             '@id' => $canonical . '#service',
             'name' => $main_keyword !== '' ? $main_keyword : $title,
-            'serviceType' => '하수구청소',
+            'serviceType' => $service_type,
             'areaServed' => !empty($profile['activeArea'])
                 ? (string) $profile['activeArea']
                 : (isset($profile['regionName']) ? (string) $profile['regionName'] : ''),
@@ -894,7 +896,7 @@ if (!function_exists('onoff_builder_inject_site_profile')) {
                     array(
                         '@type' => 'ListItem',
                         'position' => 2,
-                        'name' => (string) $profile['activeArea'] . ' 하수구청소',
+                        'name' => (string) $profile['activeArea'] . ' ' . $service_type,
                         'item' => $canonical,
                     ),
                 ),
@@ -1005,13 +1007,28 @@ if (!function_exists('onoff_builder_inject_site_profile')) {
             }
             $fallback .= '</section>';
         } elseif (!empty($profile['localAreas']) && is_array($profile['localAreas'])) {
-            $fallback .= '<section><h2>구리 동별 하수구청소 안내</h2><div class="seo-fallback__links">';
+            $fallback .= '<section><h2>구리 동별 하수구청소·하수구막힘 안내</h2><div class="seo-fallback__links">';
             foreach ($profile['localAreas'] as $area) {
                 if (empty($area['name'])) {
                     continue;
                 }
                 $area_url = !empty($area['url']) ? (string) $area['url'] : '#';
+                $clog_url = !empty($area['clog_url']) ? (string) $area['clog_url'] : '';
                 $fallback .= '<a href="' . $escape($area_url) . '">' . $escape($area['name']) . ' 하수구청소</a>';
+                if ($clog_url !== '') {
+                    $fallback .= '<a href="' . $escape($clog_url) . '">' . $escape($area['name']) . ' 하수구막힘</a>';
+                }
+            }
+            $fallback .= '</div></section>';
+        }
+
+        if (!empty($area_details['clog_url']) || !empty($area_details['clean_url'])) {
+            $fallback .= '<section><h2>' . $escape($active_area) . ' 관련 안내</h2><div class="seo-fallback__links">';
+            if (!empty($area_details['clean_url'])) {
+                $fallback .= '<a href="' . $escape($area_details['clean_url']) . '">' . $escape($active_area) . ' 하수구청소</a>';
+            }
+            if (!empty($area_details['clog_url'])) {
+                $fallback .= '<a href="' . $escape($area_details['clog_url']) . '">' . $escape($active_area) . ' 하수구막힘</a>';
             }
             $fallback .= '</div></section>';
         }
