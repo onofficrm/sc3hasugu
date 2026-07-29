@@ -86,6 +86,7 @@ export const contactInfo = {
 
 export const keywords = {
   main: runtime.mainKeyword?.trim() || `${regionName}하수구청소`,
+  clog: `${regionName}하수구막힘`,
   secondary: Array.isArray(runtime.secondaryKeywords) ? runtime.secondaryKeywords : [],
 };
 
@@ -93,6 +94,12 @@ export const localAreas = Array.isArray(runtime.localAreas) ? runtime.localAreas
 
 export const areaSpots = Array.isArray(runtime.areaSpots) ? runtime.areaSpots : [];
 export const siteFaqs = Array.isArray(runtime.faqs) ? runtime.faqs : [];
+
+export const reviews: Array<{ area: string; title: string; body: string; rating: number }> = Array.isArray((runtime as any).reviews) ? (runtime as any).reviews : [];
+export const pageIntro = '';
+export const howToSteps: Array<{ name: string; text: string }> = [];
+export const howToName = '하수구가 막혔을 때 대처 방법';
+export const siteDefinition = '';
 
 export const activeLocalArea =
   runtime.activeAreaDetails ||

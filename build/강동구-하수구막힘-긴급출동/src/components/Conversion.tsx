@@ -1,18 +1,6 @@
-import { CheckCircle2, Clock, MapPin, Phone, Wrench } from 'lucide-react';
-import {
-  activeLocalArea,
-  getDongFromUrl,
-  isClogFocus,
-  localAreas,
-  localAreaUrl,
-  localClogUrl,
-  phoneCtaLabel,
-  phoneCtaSubLabel,
-  regionName,
-  relatedCleanUrl,
-  relatedClogUrl,
-  telHref,
-} from '../data';
+import { FormEvent, useEffect, useState } from 'react';
+import { CheckCircle2, Clock, MapPin, Phone, Wrench, Camera, Upload, Star } from 'lucide-react';
+import { activeLocalArea, getDongFromUrl, isClogFocus, localAreas, localAreaUrl, localClogUrl, phoneCtaLabel, phoneCtaSubLabel, regionName, relatedCleanUrl, relatedClogUrl, telHref, reviews } from '../data';
 
 const guideLinks = [
   {
@@ -87,6 +75,208 @@ export const PhoneCta = ({
     </a>
   );
 };
+
+export const PhotoInquiryForm = ({ compact = false }: { compact?: boolean }) => {
+  const defaultArea = getDongFromUrl() || localAreas[0]?.name || regionName;
+  const [phone, setPhone] = useState('');
+  const [area, setArea] = useState(defaultArea);
+  const [symptom, setSymptom] = useState('싱크대/배수 막힘');
+  const [photo, setPhoto] = useState<File | null>(null);
+  const [preview, setPreview] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'ok' | 'error'>('idle');
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    if (!photo) {
+      setPreview('');
+      return;
+    }
+    const url = URL.createObjectURL(photo);
+    setPreview(url);
+    return () => URL.revokeObjectURL(url);
+  }, [photo]);
+
+  const onSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!photo) {
+      setStatus('error');
+      setMessage('사진 1장을 올려 주세요.');
+      return;
+    }
+    setStatus('loading');
+    setMessage('');
+    try {
+      const tokenRes = await fetch('/proc/symptom-inquiry-token.php', { credentials: 'same-origin' });
+      const tokenData = await tokenRes.json();
+      if (!tokenData?.token) throw new Error('토큰 발급 실패');
+
+      const fd = new FormData();
+      fd.append('phone', phone);
+      fd.append('area', area);
+      fd.append('symptom', symptom);
+      fd.append('onoff_inquiry_token', tokenData.token);
+      fd.append('website_url', '');
+      fd.append('photo', photo);
+
+      const res = await fetch('/proc/symptom-inquiry.php', {
+        method: 'POST',
+        body: fd,
+        credentials: 'same-origin',
+      });
+      const data = await res.json();
+      if (!data?.success) throw new Error(data?.message || '접수 실패');
+      setStatus('ok');
+      setMessage(data.message || '사진이 접수되었습니다. 전화로 안내드리겠습니다.');
+      setPhone('');
+      setPhoto(null);
+    } catch (err) {
+      setStatus('error');
+      setMessage(err instanceof Error ? err.message : '접수에 실패했습니다.');
+    }
+  };
+
+  return (
+    <section id="inquiry-form" className={`${compact ? 'py-0' : 'py-20 md:py-28 bg-slate-50'} scroll-mt-24`}>
+      <div className={compact ? '' : 'max-w-3xl mx-auto px-4'}>
+        {!compact && (
+          <div className="text-center mb-10">
+            <p className="text-orange-500 font-extrabold tracking-widest text-sm mb-3">PHOTO</p>
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight break-keep">
+              사진 1장만 보내주세요
+            </h2>
+            <p className="mt-3 text-slate-600 font-medium break-keep">
+              원진하수구 · 성남하수구청소. 상담은 전화로만 진행하며, 증상 파악용 사진만 남겨 주세요.
+            </p>
+          </div>
+        )}
+
+        <form
+          onSubmit={onSubmit}
+          className="bg-white rounded-[2rem] border border-slate-200 shadow-xl p-6 md:p-8 space-y-4"
+        >
+          <div className="grid sm:grid-cols-2 gap-4">
+            <label className="block">
+              <span className="block text-sm font-bold text-slate-700 mb-2">연락처 *</span>
+              <input
+                required
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="010-0000-0000"
+                className="w-full rounded-xl border border-slate-200 px-4 py-3 font-medium outline-none focus:border-orange-400"
+              />
+            </label>
+            <label className="block">
+              <span className="block text-sm font-bold text-slate-700 mb-2">지역 *</span>
+              <select
+                value={area}
+                onChange={(e) => setArea(e.target.value)}
+                className="w-full rounded-xl border border-slate-200 px-4 py-3 font-medium outline-none focus:border-orange-400 bg-white"
+              >
+                {localAreas.map((a) => (
+                  <option key={a.slug} value={a.name}>{a.name}</option>
+                ))}
+                <option value={`${regionName} 기타`}>{regionName} 기타</option>
+              </select>
+            </label>
+          </div>
+
+          <label className="block">
+            <span className="block text-sm font-bold text-slate-700 mb-2">증상</span>
+            <select
+              value={symptom}
+              onChange={(e) => setSymptom(e.target.value)}
+              className="w-full rounded-xl border border-slate-200 px-4 py-3 font-medium outline-none focus:border-orange-400 bg-white"
+            >
+              <option>싱크대/배수 막힘</option>
+              <option>변기 막힘</option>
+              <option>하수구 역류</option>
+              <option>배수구 악취</option>
+              <option>상가/음식점 배수</option>
+              <option>기타</option>
+            </select>
+          </label>
+
+          <label className="block">
+            <span className="block text-sm font-bold text-slate-700 mb-2">증상 사진 1장 *</span>
+            <div className="relative rounded-2xl border-2 border-dashed border-orange-200 bg-orange-50/50 p-5 text-center cursor-pointer hover:bg-orange-50 transition-colors">
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                required
+                className="absolute inset-0 opacity-0 cursor-pointer"
+                onChange={(e) => setPhoto(e.target.files?.[0] || null)}
+              />
+              {preview ? (
+                <img src={preview} alt="미리보기" className="mx-auto max-h-40 rounded-xl object-cover" />
+              ) : (
+                <div className="flex flex-col items-center gap-2 text-slate-600">
+                  <Upload className="w-7 h-7 text-orange-500" />
+                  <span className="font-bold text-sm">사진 1장 · JPG/PNG · 5MB 이하</span>
+                </div>
+              )}
+            </div>
+          </label>
+
+          <input type="text" name="website_url" className="hidden" tabIndex={-1} autoComplete="off" />
+
+          <button
+            type="submit"
+            disabled={status === 'loading'}
+            className="w-full inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-orange-500 disabled:opacity-60 text-white px-6 py-4 rounded-2xl font-extrabold transition-colors"
+          >
+            <Camera className="w-5 h-5" />
+            {status === 'loading' ? '전송 중...' : '사진 1장 보내기'}
+          </button>
+
+          {message && (
+            <p className={`text-sm font-bold text-center ${status === 'ok' ? 'text-emerald-600' : 'text-red-500'}`}>
+              {message}
+            </p>
+          )}
+
+          <p className="text-xs text-slate-400 text-center break-keep">
+            사진은 증상 확인용입니다. 상담은 전화로만 진행합니다.
+          </p>
+        </form>
+      </div>
+    </section>
+  );
+};
+
+export const Reviews = () => (
+  <section id="reviews" className="py-20 md:py-28 bg-white scroll-mt-20">
+    <div className="max-w-7xl mx-auto px-4">
+      <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+        <div>
+          <p className="text-orange-500 font-extrabold tracking-widest text-sm mb-3">REVIEWS</p>
+          <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight break-keep">
+            {regionName} 현장 후기
+          </h2>
+        </div>
+        <a href="/bbs/board.php?bo_table=notice" className="text-orange-500 font-extrabold hover:text-orange-600">
+          시공사례 더보기 →
+        </a>
+      </div>
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {reviews.map((r) => (
+          <article key={r.title} className="rounded-3xl border border-slate-200 bg-slate-50 p-6 flex flex-col">
+            <div className="flex items-center gap-1 mb-3">
+              {Array.from({ length: r.rating }).map((_, i) => (
+                <Star key={i} className="w-4 h-4 fill-orange-400 text-orange-400" />
+              ))}
+            </div>
+            <span className="inline-flex self-start mb-3 px-2.5 py-1 rounded-full bg-orange-100 text-orange-600 text-xs font-extrabold">
+              {r.area}
+            </span>
+            <h3 className="font-extrabold text-slate-900 text-lg mb-2 break-keep">{r.title}</h3>
+            <p className="text-slate-600 text-sm font-medium leading-relaxed break-keep flex-grow">{r.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+);
 
 export const NeighborhoodGuide = () => {
   const area = activeLocalArea;

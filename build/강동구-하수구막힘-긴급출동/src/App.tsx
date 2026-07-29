@@ -3,7 +3,9 @@ import { Symptoms, Services, ContextTypes } from './components/ProblemSolution';
 import { Equipment, Process, Areas } from './components/TrustProcess';
 import { CaseGallery } from './components/CaseGallery';
 import { Notices, FAQ, FinalCTA, Footer } from './components/Support';
-import { GuideHub, NeighborhoodGuide } from './components/Conversion';
+import { GuideHub, NeighborhoodGuide, PhotoInquiryForm, Reviews } from './components/Conversion';
+import { AnswerDefinition, HowToGuide } from './components/AnswerAeo';
+import { CompareGuide, TrustIdentity } from './components/TrustAeo';
 
 export default function App() {
   return (
@@ -11,7 +13,10 @@ export default function App() {
       <Header />
       <main>
         <Hero />
+        <AnswerDefinition />
         <Symptoms />
+        <HowToGuide />
+        <CompareGuide />
         <Services />
         <ContextTypes />
         <NeighborhoodGuide />
@@ -20,6 +25,9 @@ export default function App() {
         <Process />
         <Areas />
         <CaseGallery />
+        <Reviews />
+        <TrustIdentity />
+        <PhotoInquiryForm />
         <Notices />
         <FAQ />
         <FinalCTA />

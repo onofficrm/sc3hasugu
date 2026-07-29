@@ -25,12 +25,16 @@ export const Header = () => {
           </div>
         </a>
 
-        <nav className="hidden lg:flex items-center gap-7">
+                <nav className="hidden lg:flex items-center gap-7">
           <button onClick={() => scrollTo('services')} className="text-sm font-bold text-slate-700 hover:text-orange-500 transition-colors">서비스</button>
+          <button onClick={() => scrollTo('howto')} className="text-sm font-bold text-slate-700 hover:text-orange-500 transition-colors">대처법</button>
+          <button onClick={() => scrollTo('compare')} className="text-sm font-bold text-slate-700 hover:text-orange-500 transition-colors">뚫기vs청소</button>
+          <button onClick={() => scrollTo('inquiry-form')} className="text-sm font-bold text-slate-700 hover:text-orange-500 transition-colors">사진상담</button>
           <button onClick={() => scrollTo('areas')} className="text-sm font-bold text-slate-700 hover:text-orange-500 transition-colors">출동지역</button>
           <a href="/bbs/board.php?bo_table=notice" className="text-sm font-bold text-slate-700 hover:text-orange-500 transition-colors">시공사례</a>
-          <button onClick={() => scrollTo('area-guide')} className="text-sm font-bold text-slate-700 hover:text-orange-500 transition-colors">지역안내</button>
-          <button onClick={() => scrollTo('guide-hub')} className="text-sm font-bold text-slate-700 hover:text-orange-500 transition-colors">배관정보</button>
+          <a href="/page/about.php" className="text-sm font-bold text-slate-700 hover:text-orange-500 transition-colors">소개</a>
+          <button onClick={() => scrollTo('reviews')} className="text-sm font-bold text-slate-700 hover:text-orange-500 transition-colors">후기</button>
+          <button onClick={() => scrollTo('faq')} className="text-sm font-bold text-slate-700 hover:text-orange-500 transition-colors">FAQ</button>
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
