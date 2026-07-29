@@ -42,6 +42,23 @@ if (is_file(G5_PATH.'/components/tracking-body.php')) {
     include_once(G5_PATH.'/components/tracking-body.php');
 }
 
+// site_config 브랜드 색 → :root (hex만 허용) — stylesheet 등록 전에 구성
+$g5_css_brand = '';
+if (function_exists('g5site_cfg')) {
+    $g5_primary = g5site_cfg('primary_color', '');
+    $g5_secondary = g5site_cfg('secondary_color', '');
+    $g5_primary_hover = g5site_cfg('primary_color_hover', '#e56200');
+    if ($g5_primary !== '' && preg_match('/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/', $g5_primary)) {
+        $g5_css_brand .= '--color-primary:'.$g5_primary.';';
+    }
+    if ($g5_primary_hover !== '' && preg_match('/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/', $g5_primary_hover)) {
+        $g5_css_brand .= '--color-primary-hover:'.$g5_primary_hover.';';
+    }
+    if ($g5_secondary !== '' && preg_match('/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/', $g5_secondary)) {
+        $g5_css_brand .= '--color-secondary:'.$g5_secondary.';--color-muted:'.$g5_secondary.';';
+    }
+}
+
 // 템플릿 전용 CSS/JS (default.css·common.js 이후 로드)
 add_stylesheet('<link rel="stylesheet" href="'.G5_CSS_URL.'/custom.css">', 10);
 if ($g5_css_brand !== '') {
@@ -95,18 +112,6 @@ $g5_consult_label = function_exists('g5site_cfg') ? g5site_cfg('consultation_tex
 $g5_phone = function_exists('g5site_cfg') ? g5site_cfg('phone', '') : '';
 $g5_inquiry_url = function_exists('g5site_tel_link') ? g5site_tel_link($g5_phone) : ('tel:' . preg_replace('/[^0-9+]/', '', $g5_phone));
 
-// site_config 브랜드 색 → :root (hex만 허용)
-$g5_css_brand = '';
-if (function_exists('g5site_cfg')) {
-    $g5_primary = g5site_cfg('primary_color', '');
-    $g5_secondary = g5site_cfg('secondary_color', '');
-    if ($g5_primary !== '' && preg_match('/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/', $g5_primary)) {
-        $g5_css_brand .= '--color-primary:'.$g5_primary.';';
-    }
-    if ($g5_secondary !== '' && preg_match('/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/', $g5_secondary)) {
-        $g5_css_brand .= '--color-secondary:'.$g5_secondary.';--color-muted:'.$g5_secondary.';';
-    }
-}
 
 // 메뉴 (PC / 모바일)
 $menu_datas_pc = get_menu_db(0, true);
